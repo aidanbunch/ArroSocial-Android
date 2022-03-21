@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ArroSocial</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="the_platform_made_for_the_people">The Platform Made for the People</string>
+    <string name="learn_more">New around here? <a href="https://www.arro.io">More about Arro Social</a></string>
+</resources>

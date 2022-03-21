@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/off_white"
+    tools:context=".MainActivity">
+
+    <!-- Text: Slogan-->
+    <TextView
+        android:id="@+id/main_slogan"
+        android:layout_width="380dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/the_platform_made_for_the_people"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="37sp"/>
+
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/onboarding_logo"
+        android:layout_above="@id/login_btn"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentTop="true"/>
+
+    <!-- Button: Log In -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/login_btn"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_above="@id/signup_btn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_btn_purple"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/log_in"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"/>
+
+    <!-- Button: Sign Up -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signup_btn"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/rounded_btn_white"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/sign_up"
+        android:textSize="20sp"
+        android:textColor="@color/purple"
+        android:textAllCaps="false"/>
+
+    <!-- Text: Learn more -->
+    <TextView
+        android:id="@+id/learn_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
+        android:fontFamily="@font/poppins_medium"
+        android:linksClickable="true"
+        android:text="@string/learn_more"
+        android:textColor="#000000"
+        android:textColorLink="@color/purple"/>
+
+
+</RelativeLayout>
