@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/off_white"
+    android:id="@+id/signUpParent"
     tools:context=".SignupActivity">
 
     <TextView
@@ -32,7 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="e-mail address"
-            android:inputType="textEmailAddress"/>
+            android:inputType="textEmailAddress"
+            android:background="@drawable/rounded_edittext" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:background="@drawable/rounded_edittext"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -66,7 +69,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="re-enter password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:background="@drawable/rounded_edittext"
+            android:imeOptions="actionSend"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton

@@ -10,8 +10,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +42,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        setUpActionBar();
+        setupUI(findViewById(R.id.signUpParent));
 
         // init
         emailForm = findViewById(R.id.emForm);
@@ -46,14 +51,21 @@ public class SignupActivity extends AppCompatActivity {
         signUpError = findViewById(R.id.signUpError);
         signUpBtn = findViewById(R.id.signup_btn_2);
 
-        emailForm.getBackground().setAlpha(30);
-        passForm.getBackground().setAlpha(30);
-        rePassForm.getBackground().setAlpha(30);
-
         mAuth = FirebaseAuth.getInstance();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Signing up...");
+
+        rePassForm.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == 66) {
+                    hideSoftKeyboard(view);
+                    signUpBtn.performClick();
+                }
+                return false;
+            }
+        });
 
         // reg click
         signUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -120,25 +132,12 @@ public class SignupActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    public void setUpActionBar() {
-        // Action Bar
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("");
-        actionBar.setHomeAsUpIndicator(R.drawable.chevron_left);
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.off_white));
-
-        // back button
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-    }
-
     private static boolean checkPass(String str) {
         char ch;
         boolean capitalFlag = false;
         boolean lowerCaseFlag = false;
         boolean numberFlag = false;
-        boolean lengthFlag = str.length() > 6;
+        boolean lengthFlag = str.length() >= 7;
         for(int i=0;i < str.length();i++) {
             ch = str.charAt(i);
             if( Character.isDigit(ch)) {
@@ -160,6 +159,38 @@ public class SignupActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public void setupUI(View view) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof TextInputEditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(view);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
+
+        // Action Bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("");
+        actionBar.setHomeAsUpIndicator(R.drawable.chevron_left);
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.off_white));
+        actionBar.setElevation(0);
+
+        // back button
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
     }
 
     private void setSignUpError(TextView signUpError, String errorMsg) {

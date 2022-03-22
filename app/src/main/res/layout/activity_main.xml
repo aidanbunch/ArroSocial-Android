@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/off_white"
-    tools:context=".MainActivity">
+    android:id="@+id/welcomeViewParent"
+    tools:context=".WelcomeViewActivity">
 
     <!-- Text: Slogan-->
     <TextView

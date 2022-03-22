@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArroSocial">
         <activity
-            android:name=".MainActivity"
+            android:name=".WelcomeViewActivity"
             android:exported="false" />
         <activity
             android:name=".SignupActivity"

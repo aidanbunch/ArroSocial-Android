@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
 
         hideToolBar();
 
-        MotionLayout splashLayout = (MotionLayout) findViewById(R.id.splashLayout);
+        MotionLayout splashLayout = (MotionLayout) findViewById(R.id.splashLayoutParent);
 
         splashLayout.setTransitionListener(new TransitionAdapter() {
             public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
@@ -43,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
                 colorAnimation.start();
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, WelcomeViewActivity.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }

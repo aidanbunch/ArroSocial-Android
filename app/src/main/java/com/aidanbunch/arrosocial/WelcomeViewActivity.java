@@ -9,10 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class WelcomeViewActivity extends AppCompatActivity {
 
     //views
     AppCompatButton signupBtn, loginBtn;
@@ -22,8 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpActionBar();
-        hideToolBar();
+        setUpUI();
 
         TextView learnMore = (TextView) findViewById(R.id.learn_more);
         learnMore.setMovementMethod(LinkMovementMethod.getInstance());
@@ -36,11 +34,16 @@ public class MainActivity extends AppCompatActivity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SignupActivity.class));
+                startActivity(new Intent(WelcomeViewActivity.this, SignupActivity.class));
             }
         });
 
 
+    }
+
+    public void setUpUI() {
+        hideToolBar();
+        setUpActionBar();
     }
 
     public void hideToolBar(){
