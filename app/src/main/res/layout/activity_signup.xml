@@ -21,26 +21,27 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emFormLayout"
-        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_width="370dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_txt"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/rounded_btn_white">
+        android:layout_marginTop="40dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="e-mail address" />
+            android:hint="e-mail address"
+            android:inputType="textEmailAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passFormLayout"
-        android:layout_width="match_parent"
+        android:layout_width="370dp"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:layout_below="@+id/emFormLayout"
         android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_btn_white"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -48,16 +49,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="password"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/rePassFormLayout"
-        android:layout_width="match_parent"
+        android:layout_width="370dp"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passFormLayout"
         android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_btn_white"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="re-enter password"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -86,14 +87,27 @@
         android:id="@+id/terms_cond"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="35dp"
         android:fontFamily="@font/poppins_medium"
         android:linksClickable="true"
         android:text="Read our Terms &amp; Conditions"
         android:textColor="@color/purple"
-        android:textColorLink="@color/purple"/>
+        android:textColorLink="@color/purple" />
+
+    <TextView
+        android:id="@+id/signUpError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="placeholder"
+        android:fontFamily="@font/poppins"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/signup_btn_2"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/off_white"/>
 
 
 </RelativeLayout>

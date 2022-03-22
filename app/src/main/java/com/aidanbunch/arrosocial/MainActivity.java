@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         signupBtn = findViewById(R.id.signup_btn);
         loginBtn = findViewById(R.id.login_btn);
 
-        //register btn click
+        //sign up btn click
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

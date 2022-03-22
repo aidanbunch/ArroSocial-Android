@@ -7,9 +7,12 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,12 +21,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
 
     //views
-    TextInputEditText emailForm, passForm;
+    TextView signUpError;
+    TextInputEditText emailForm, passForm, rePassForm;
     AppCompatButton signUpBtn;
     ProgressDialog progressDialog;
 
@@ -39,7 +42,13 @@ public class SignupActivity extends AppCompatActivity {
         // init
         emailForm = findViewById(R.id.emForm);
         passForm = findViewById(R.id.passForm);
+        rePassForm = findViewById(R.id.rePassForm);
+        signUpError = findViewById(R.id.signUpError);
         signUpBtn = findViewById(R.id.signup_btn_2);
+
+        emailForm.getBackground().setAlpha(30);
+        passForm.getBackground().setAlpha(30);
+        rePassForm.getBackground().setAlpha(30);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -52,17 +61,26 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = emailForm.getText().toString().trim();
                 String password = passForm.getText().toString().trim();
+                String rePassword = rePassForm.getText().toString().trim();
 
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    emailForm.setError("Invalid email.");
-                    emailForm.setFocusable(true);
-
+                if (email.equals("") || password.equals("") || rePassword.equals("")) {
+                    hideSoftKeyboard(view);
+                    setSignUpError(signUpError, "All fields must be entered.");
                 }
-                else if (password.length() < 6) {
-                    passForm.setError("Password must be at least 6 characters.");
-                    passForm.setFocusable(true);
+                else if (!(password.compareTo(rePassword) == 0)) {
+                    hideSoftKeyboard(view);
+                    setSignUpError(signUpError, "Both passwords must match.");
+                }
+                else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    hideSoftKeyboard(view);
+                    setSignUpError(signUpError, "Invalid email");
+                }
+                else if (!(checkPass(password))) {
+                    hideSoftKeyboard(view);
+                    setSignUpError(signUpError, "Password needs at least 6 characters, a number, a capital letter and a lowercase letter.");
                 }
                 else {
+                    signUpError.setTextColor(getResources().getColor(R.color.off_white));
                     signUpUser(email, password);
                 }
             }
@@ -113,5 +131,39 @@ public class SignupActivity extends AppCompatActivity {
         // back button
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+    }
+
+    private static boolean checkPass(String str) {
+        char ch;
+        boolean capitalFlag = false;
+        boolean lowerCaseFlag = false;
+        boolean numberFlag = false;
+        boolean lengthFlag = str.length() > 6;
+        for(int i=0;i < str.length();i++) {
+            ch = str.charAt(i);
+            if( Character.isDigit(ch)) {
+                numberFlag = true;
+            }
+            else if (Character.isUpperCase(ch)) {
+                capitalFlag = true;
+            } else if (Character.isLowerCase(ch)) {
+                lowerCaseFlag = true;
+            }
+            if(numberFlag && capitalFlag && lowerCaseFlag && lengthFlag)
+                return true;
+        }
+        return false;
+    }
+
+    private void hideSoftKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void setSignUpError(TextView signUpError, String errorMsg) {
+        signUpError.setTextColor(getResources().getColor(R.color.red));
+        signUpError.setText(errorMsg);
     }
 }
