@@ -22,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        setUpActionBar();
         hideToolBar();
 
         TextView learnMore = (TextView) findViewById(R.id.learn_more);
@@ -81,5 +80,9 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
         //END_INCLUDE (set_ui_flags)
 
+    }
+    public void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
     }
 }
