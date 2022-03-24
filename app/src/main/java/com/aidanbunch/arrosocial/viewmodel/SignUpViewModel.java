@@ -27,8 +27,8 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void signUp(String email, String password, ProgressDialog progressDialog) {
-        authAppRepository.signUpUser(email, password, progressDialog);
+    public void signUp(String email, String password) {
+        authAppRepository.signUpUser(email, password);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {

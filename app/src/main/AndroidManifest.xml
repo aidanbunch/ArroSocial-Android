@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArroSocial">
         <activity
+            android:name=".view.onboardingUC.UserCreationOnboardingActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.WelcomeViewActivity"
             android:exported="false" />
         <activity

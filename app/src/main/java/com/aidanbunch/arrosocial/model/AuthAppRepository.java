@@ -40,18 +40,18 @@ public class AuthAppRepository {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void signUpUser(String email, String password, ProgressDialog progressDialog) {
-        progressDialog.show();
+    public void signUpUser(String email, String password) {
+        //progressDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             System.out.println("registered");
                         } else {
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             flag = 1;
                             /* If sign in fails, display a message to the user.
                             setSignUpError(signUpError, "Authentication failed.");
@@ -61,7 +61,7 @@ public class AuthAppRepository {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
                 //Toast.makeText(SignupActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                 //setSignUpError(signUpError, ""+e.getMessage());
             }

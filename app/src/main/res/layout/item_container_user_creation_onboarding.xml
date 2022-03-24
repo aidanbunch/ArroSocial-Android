@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginBottom="50dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:id="@+id/onboardingLayout"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/onboardingTitle"
+        android:layout_width="290dp"
+        android:layout_height="190dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="30dp"
+        android:adjustViewBounds="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="40sp"
+        android:textColor="@color/purple"
+        android:contentDescription="@string/app_name" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:id="@+id/onboardingFirstName"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textAllCaps="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_below="@id/onboardingTitle"
+        android:inputType="text"
+        android:layout_marginTop="20dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:id="@+id/onboardingLastName"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textAllCaps="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_below="@id/onboardingFirstName"
+        android:inputType="text"
+        android:layout_marginTop="30dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/onboardingImagePreview"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:adjustViewBounds="true"
+        android:visibility="invisible"
+        android:focusable="false"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:id="@+id/onboardingImagePickerTitle"
+        android:layout_width="260dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="50dp"
+        android:layout_below="@id/onboardingImagePreview"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="30sp"
+        android:textColor="@color/purple"
+        android:textAlignment="center"
+        android:contentDescription="@string/app_name" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/shuffleBtn"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_below="@id/onboardingImagePickerTitle"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:visibility="invisible"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:focusable="false"/>
+
+
+</RelativeLayout>
