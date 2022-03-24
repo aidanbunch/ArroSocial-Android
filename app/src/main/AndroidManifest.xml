@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArroSocial">
         <activity
-            android:name=".WelcomeViewActivity"
+            android:name=".view.WelcomeViewActivity"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".view.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.SplashActivity"
             android:exported="true"
             android:noHistory="true">
             <intent-filter>

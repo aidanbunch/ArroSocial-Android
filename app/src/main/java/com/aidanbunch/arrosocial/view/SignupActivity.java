@@ -1,31 +1,36 @@
-package com.aidanbunch.arrosocial;
+package com.aidanbunch.arrosocial.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.aidanbunch.arrosocial.R;
+import com.aidanbunch.arrosocial.utils.Constants;
+import com.aidanbunch.arrosocial.utils.UtilsMethods;
+import com.aidanbunch.arrosocial.viewmodel.SignUpViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -34,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
     TextInputEditText emailForm, passForm, rePassForm;
     AppCompatButton signUpBtn;
     ProgressDialog progressDialog;
+    SignUpViewModel signUpViewModel;
 
     private FirebaseAuth mAuth;
 
@@ -51,6 +57,8 @@ public class SignupActivity extends AppCompatActivity {
         signUpError = findViewById(R.id.signUpError);
         signUpBtn = findViewById(R.id.signup_btn_2);
 
+        signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
+
         mAuth = FirebaseAuth.getInstance();
 
         progressDialog = new ProgressDialog(this);
@@ -60,7 +68,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (i == 66) {
-                    hideSoftKeyboard(view);
+                    hideSoftKeyboard(SignupActivity.this, view);
                     signUpBtn.performClick();
                 }
                 return false;
@@ -69,6 +77,7 @@ public class SignupActivity extends AppCompatActivity {
 
         // reg click
         signUpBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View view) {
                 String email = emailForm.getText().toString().trim();
@@ -76,31 +85,30 @@ public class SignupActivity extends AppCompatActivity {
                 String rePassword = rePassForm.getText().toString().trim();
 
                 if (email.equals("") || password.equals("") || rePassword.equals("")) {
-                    hideSoftKeyboard(view);
+                    hideSoftKeyboard(SignupActivity.this, view);
                     setSignUpError(signUpError, "All fields must be entered.");
-                }
-                else if (!(password.compareTo(rePassword) == 0)) {
-                    hideSoftKeyboard(view);
+                } else if (!(password.compareTo(rePassword) == 0)) {
+                    hideSoftKeyboard(SignupActivity.this, view);
                     setSignUpError(signUpError, "Both passwords must match.");
-                }
-                else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    hideSoftKeyboard(view);
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    hideSoftKeyboard(SignupActivity.this, view);
                     setSignUpError(signUpError, "Invalid email");
-                }
-                else if (!(checkPass(password))) {
-                    hideSoftKeyboard(view);
+                } else if (!(UtilsMethods.checkPass(password))) {
+                    hideSoftKeyboard(SignupActivity.this, view);
                     setSignUpError(signUpError, "Password needs at least 6 characters, a number, a capital letter and a lowercase letter.");
-                }
-                else {
-                    signUpError.setTextColor(getResources().getColor(R.color.off_white));
-                    signUpUser(email, password);
+                } else {
+                    signUpError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
+                    signUpViewModel.signUp(email, password, progressDialog);
+                    if(signUpViewModel.getFlag() == 1) {
+                        setSignUpError(signUpError, "Authentication failed.");
+                    }
                 }
             }
         });
 
     }
 
-    private void signUpUser(String email, String password) {
+    /*private void signUpUser(String email, String password) {
         progressDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -113,17 +121,19 @@ public class SignupActivity extends AppCompatActivity {
                         } else {
                             progressDialog.dismiss();
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(SignupActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            setSignUpError(signUpError, "Authentication failed.");
+                            //Toast.makeText(SignupActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
-                Toast.makeText(SignupActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SignupActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                setSignUpError(signUpError, "" + e.getMessage());
             }
         });
-    }
+    } */
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -132,34 +142,6 @@ public class SignupActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
-    private static boolean checkPass(String str) {
-        char ch;
-        boolean capitalFlag = false;
-        boolean lowerCaseFlag = false;
-        boolean numberFlag = false;
-        boolean lengthFlag = str.length() >= 7;
-        for(int i=0;i < str.length();i++) {
-            ch = str.charAt(i);
-            if( Character.isDigit(ch)) {
-                numberFlag = true;
-            }
-            else if (Character.isUpperCase(ch)) {
-                capitalFlag = true;
-            } else if (Character.isLowerCase(ch)) {
-                lowerCaseFlag = true;
-            }
-            if(numberFlag && capitalFlag && lowerCaseFlag && lengthFlag)
-                return true;
-        }
-        return false;
-    }
-
-    private void hideSoftKeyboard(View view) {
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
 
     public void setupUI(View view) {
 
@@ -167,7 +149,7 @@ public class SignupActivity extends AppCompatActivity {
         if (!(view instanceof TextInputEditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(view);
+                    hideSoftKeyboard(SignupActivity.this, view);
                     return false;
                 }
             });
@@ -185,7 +167,7 @@ public class SignupActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("");
         actionBar.setHomeAsUpIndicator(R.drawable.chevron_left);
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.color.off_white));
+        actionBar.setBackgroundDrawable(getResources().getDrawable(Constants.AppColors.off_white));
         actionBar.setElevation(0);
 
         // back button
@@ -193,8 +175,15 @@ public class SignupActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    private void setSignUpError(TextView signUpError, String errorMsg) {
-        signUpError.setTextColor(getResources().getColor(R.color.red));
+    public void setSignUpError(TextView signUpError, String errorMsg) {
+        signUpError.setTextColor(getResources().getColor(Constants.AppColors.red));
         signUpError.setText(errorMsg);
+    }
+
+    private static void hideSoftKeyboard(SignupActivity signupActivity, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) signupActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

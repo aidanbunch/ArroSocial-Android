@@ -1,57 +1,51 @@
-package com.aidanbunch.arrosocial;
+package com.aidanbunch.arrosocial.view;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.TransitionAdapter;
+import androidx.appcompat.widget.AppCompatButton;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.TextView;
 
-public class SplashActivity extends AppCompatActivity {
+import com.aidanbunch.arrosocial.R;
+
+public class WelcomeViewActivity extends AppCompatActivity {
+
+    //views
+    AppCompatButton signupBtn, loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_main);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        setUpUI();
 
-        hideToolBar();
+        TextView learnMore = (TextView) findViewById(R.id.learn_more);
+        learnMore.setMovementMethod(LinkMovementMethod.getInstance());
 
-        MotionLayout splashLayout = (MotionLayout) findViewById(R.id.splashLayoutParent);
+        //initialize views
+        signupBtn = findViewById(R.id.signup_btn);
+        loginBtn = findViewById(R.id.login_btn);
 
-        splashLayout.setTransitionListener(new TransitionAdapter() {
-            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-            }
+        //sign up btn click
+        signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-
-                int colorFrom = getResources().getColor(R.color.purple);
-                int colorTo = getResources().getColor(R.color.off_white);
-                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-                colorAnimation.setDuration(400);
-                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        motionLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue());
-                    }
-                });
-                colorAnimation.start();
-                startActivity(new Intent(SplashActivity.this, WelcomeViewActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            }
-            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
-            }
-            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+            public void onClick(View view) {
+                startActivity(new Intent(WelcomeViewActivity.this, SignupActivity.class));
             }
         });
+
+
+    }
+
+    public void setUpUI() {
+        hideToolBar();
+        setUpActionBar();
     }
 
     public void hideToolBar(){
@@ -91,5 +85,9 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
         //END_INCLUDE (set_ui_flags)
 
+    }
+    public void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/off_white"
     android:id="@+id/signUpParent"
-    tools:context=".SignupActivity">
+    tools:context=".view.SignupActivity">
 
     <TextView
         android:id="@+id/signup_txt"
@@ -86,7 +86,8 @@
         android:text="@string/sign_up"
         android:textSize="20sp"
         android:textColor="@color/white"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        android:focusable="false"/>
 
     <TextView
         android:id="@+id/terms_cond"

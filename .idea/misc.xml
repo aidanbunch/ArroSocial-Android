@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/image_preview_default.xml" value="0.2085" />
+        <entry key="app/src/main/res/drawable/onboarding_indicator_active.xml" value="0.2085" />
+        <entry key="app/src/main/res/drawable/onboarding_indicator_inactive.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/rounded_btn_purple.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/rounded_btn_white.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/rounded_edittext.xml" value="0.2085" />
