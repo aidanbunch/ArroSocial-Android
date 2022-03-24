@@ -11,23 +11,22 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseUser;
 import com.aidanbunch.arrosocial.model.AuthAppRepository;
 
-public class SignUpViewModel extends AndroidViewModel {
+public class LogInViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
 
-    public SignUpViewModel(@NonNull Application application) {
+    public LogInViewModel(@NonNull Application application) {
         super(application);
         authAppRepository = new AuthAppRepository(application);
         userLiveData = authAppRepository.getUserLiveData();
     }
 
-    public int getSignUpFailFlag() {
-        return(authAppRepository.getSignUpFailFlag());
+    public int getSignInFailFlag() {
+        return authAppRepository.getSignInFailFlag();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
-    public void signUp(String email, String password) {
-        authAppRepository.signUpUser(email, password);
+    public void signIn(String email, String password) {
+        authAppRepository.loginUser(email, password);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {

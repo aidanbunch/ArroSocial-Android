@@ -55,9 +55,6 @@ public class SignupActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Signing up...");
-
         rePassForm.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -93,7 +90,7 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     signUpError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
                     signUpViewModel.signUp(email, password);
-                    if(signUpViewModel.getFlag() == 1) {
+                    if(signUpViewModel.getSignUpFailFlag() == 1) {
                         setSignUpError(signUpError, "Authentication failed.");
                     }
                     else {

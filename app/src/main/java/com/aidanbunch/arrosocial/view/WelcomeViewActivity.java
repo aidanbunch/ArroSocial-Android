@@ -40,6 +40,12 @@ public class WelcomeViewActivity extends AppCompatActivity {
             }
         });
 
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(WelcomeViewActivity.this, LoginActivity.class));
+            }
+        });
 
     }
 

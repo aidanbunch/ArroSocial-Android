@@ -5,31 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/off_white"
-    android:id="@+id/signUpParent"
-    tools:context=".view.SignupActivity">
+    android:id="@+id/logInParent"
+    tools:context=".view.LoginActivity">
 
     <TextView
-        android:id="@+id/signup_txt"
+        android:id="@+id/signin_txt"
         android:layout_width="375dp"
         android:layout_height="64dp"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/poppins_semibold"
-        android:text="@string/sign_up"
+        android:text="@string/log_in"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="37sp"
         android:layout_marginTop="60dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emFormLayout"
+        android:id="@+id/LIemFormLayout"
         android:layout_centerHorizontal="true"
         android:layout_width="370dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/signup_txt"
+        android:layout_below="@+id/signin_txt"
         android:layout_marginTop="40dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emForm"
+            android:id="@+id/LIemForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="e-mail address"
@@ -38,16 +38,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passFormLayout"
+        android:id="@+id/LIpassFormLayout"
         android:layout_width="370dp"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/emFormLayout"
+        android:layout_below="@+id/LIemFormLayout"
         android:layout_marginTop="20dp"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passForm"
+            android:id="@+id/LIpassForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="password"
@@ -55,42 +55,23 @@
             android:background="@drawable/rounded_edittext"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/rePassFormLayout"
-        android:layout_width="370dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/passFormLayout"
-        android:layout_marginTop="20dp"
-        app:passwordToggleEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/rePassForm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="re-enter password"
-            android:inputType="textPassword"
-            android:background="@drawable/rounded_edittext"
-            android:imeOptions="actionSend"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/signup_btn_2"
+        android:id="@+id/login_btn_2"
         android:layout_width="350dp"
         android:layout_height="70dp"
-        android:layout_below="@id/rePassFormLayout"
+        android:layout_below="@id/LIpassFormLayout"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/rounded_btn_purple"
         android:fontFamily="@font/poppins_semibold"
-        android:text="@string/sign_up"
+        android:text="@string/log_in"
         android:textSize="20sp"
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:focusable="false"/>
 
     <TextView
-        android:id="@+id/terms_cond"
+        android:id="@+id/terms_cond_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -103,7 +84,7 @@
         android:textColorLink="@color/purple" />
 
     <TextView
-        android:id="@+id/signUpError"
+        android:id="@+id/signInError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -111,7 +92,7 @@
         android:text="placeholder"
         android:fontFamily="@font/poppins"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/signup_btn_2"
+        android:layout_below="@id/login_btn_2"
         android:layout_marginTop="20dp"
         android:textColor="@color/off_white"/>
 

@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.view.WelcomeViewActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -170,7 +171,7 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
         if (!(view instanceof TextInputEditText)) {
             view.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(UserCreationOnboardingActivity.this, view);
+                    UtilsMethods.hideSoftKeyboard(UserCreationOnboardingActivity.this, view);
                     return false;
                 }
             });
@@ -178,7 +179,7 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
                 @Override
                 public boolean onKey(View view, int i, KeyEvent keyEvent) {
                     if (keyEvent.getAction() == KeyEvent.KEYCODE_ENTER) {
-                        hideSoftKeyboard(UserCreationOnboardingActivity.this, view);
+                        UtilsMethods.hideSoftKeyboard(UserCreationOnboardingActivity.this, view);
                     }
                     return false;
                 }
@@ -191,13 +192,6 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
                 View innerView = ((ViewGroup) view).getChildAt(i);
                 setupUI(innerView);
             }
-        }
-    }
-
-    public static void hideSoftKeyboard(AppCompatActivity userCreationActivity, View view) {
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) userCreationActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

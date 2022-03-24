@@ -1,7 +1,6 @@
 package com.aidanbunch.arrosocial.model;
 
 import android.app.Application;
-import android.app.ProgressDialog;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -16,22 +15,22 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.concurrent.Executor;
-
 public class AuthAppRepository {
     private Application application;
 
     private FirebaseAuth mAuth;
     private MutableLiveData<FirebaseUser> userLiveData;
     private MutableLiveData<Boolean> loggedOutLiveData;
-    private int flag;
+    private int signUpFailFlag;
+    private int signInFailFlag;
 
     public AuthAppRepository(Application application) {
         this.application = application;
         this.mAuth = FirebaseAuth.getInstance();
         this.userLiveData = new MutableLiveData<>();
         this.loggedOutLiveData = new MutableLiveData<>();
-        this.flag = 0;
+        this.signUpFailFlag = 0;
+        this.signInFailFlag = 0;
 
         if (mAuth.getCurrentUser() != null) {
             userLiveData.postValue(mAuth.getCurrentUser());
@@ -48,28 +47,42 @@ public class AuthAppRepository {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //progressDialog.dismiss();
-                            System.out.println("registered");
+                            userLiveData.postValue(mAuth.getCurrentUser());
                         } else {
                             //progressDialog.dismiss();
-                            flag = 1;
-                            /* If sign in fails, display a message to the user.
-                            setSignUpError(signUpError, "Authentication failed.");
-                            Toast.makeText(SignupActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();*/
+                            signUpFailFlag = 1;
+                            //If sign in fails, display a message to the user.
+                            Toast.makeText(application.getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                });
+    }
+
+    public void loginUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                //progressDialog.dismiss();
-                //Toast.makeText(SignupActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                //setSignUpError(signUpError, ""+e.getMessage());
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    userLiveData.postValue(mAuth.getCurrentUser());
+                } else {
+                    signInFailFlag = 1;
+                    Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    public int getFlag() {
-        return flag;
+    public void logOut() {
+        mAuth.signOut();
+        loggedOutLiveData.postValue(true);
+    }
+
+    public int getSignUpFailFlag() {
+        return signUpFailFlag;
+    }
+
+    public int getSignInFailFlag() {
+        return signInFailFlag;
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {
