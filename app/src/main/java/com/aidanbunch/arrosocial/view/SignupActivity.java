@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aidanbunch.arrosocial.R;
+import com.aidanbunch.arrosocial.model.AuthAppRepository;
 import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
@@ -31,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
     TextView signUpError;
     TextInputEditText emailForm, passForm, rePassForm;
     AppCompatButton signUpBtn;
-    ProgressDialog progressDialog;
     SignUpViewModel signUpViewModel;
 
     private FirebaseAuth mAuth;
@@ -40,6 +41,8 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        AuthAppRepository.curAct = SignupActivity.this;
 
         setupUI(findViewById(R.id.signUpParent));
         setUpActionBar();
@@ -90,13 +93,15 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     signUpError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
                     signUpViewModel.signUp(email, password);
-                    if(signUpViewModel.getSignUpFailFlag() == 1) {
+                    /*if(signUpViewModel.getSignUpFailFlag() == 1) {
                         setSignUpError(signUpError, "Authentication failed.");
+                        Log.v("DEBUG", "sign-up failed");
                     }
                     else {
+                        Log.v("DEBUG", "sign-up succeeded");
                         startActivity(new Intent(SignupActivity.this, UserCreationOnboardingActivity.class));
                         finish();
-                    }
+                    }*/
 
                 }
             }

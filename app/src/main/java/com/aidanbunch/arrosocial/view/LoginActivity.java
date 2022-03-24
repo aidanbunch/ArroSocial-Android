@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aidanbunch.arrosocial.R;
+import com.aidanbunch.arrosocial.model.AuthAppRepository;
 import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
@@ -37,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        AuthAppRepository.curAct = LoginActivity.this;
 
         setupUI(findViewById(R.id.logInParent));
         setUpActionBar();
@@ -81,14 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     signInError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
                     logInViewModel.signIn(email, password);
-                    if(logInViewModel.getSignInFailFlag() == 1) {
-                        setSignUpError(signInError, "Incorrect password or email.");
-                    }
-                    else {
-                        startActivity(new Intent(LoginActivity.this, UserCreationOnboardingActivity.class));
-                        finish();
-                    }
-
                 }
             }
         });

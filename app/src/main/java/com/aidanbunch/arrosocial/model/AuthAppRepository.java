@@ -1,6 +1,9 @@
 package com.aidanbunch.arrosocial.model;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -8,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
+import com.aidanbunch.arrosocial.view.SignupActivity;
+import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -21,16 +26,15 @@ public class AuthAppRepository {
     private FirebaseAuth mAuth;
     private MutableLiveData<FirebaseUser> userLiveData;
     private MutableLiveData<Boolean> loggedOutLiveData;
-    private int signUpFailFlag;
-    private int signInFailFlag;
+    private static int signUpFailFlag;
+    private static int signInFailFlag;
+    public static Activity curAct;
 
     public AuthAppRepository(Application application) {
         this.application = application;
         this.mAuth = FirebaseAuth.getInstance();
         this.userLiveData = new MutableLiveData<>();
         this.loggedOutLiveData = new MutableLiveData<>();
-        this.signUpFailFlag = 0;
-        this.signInFailFlag = 0;
 
         if (mAuth.getCurrentUser() != null) {
             userLiveData.postValue(mAuth.getCurrentUser());
@@ -40,7 +44,6 @@ public class AuthAppRepository {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     public void signUpUser(String email, String password) {
-        //progressDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
@@ -48,14 +51,15 @@ public class AuthAppRepository {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             userLiveData.postValue(mAuth.getCurrentUser());
+                            curAct.startActivity(new Intent(application.getApplicationContext(),UserCreationOnboardingActivity.class));
+                            curAct.finish();
                         } else {
-                            //progressDialog.dismiss();
-                            signUpFailFlag = 1;
-                            //If sign in fails, display a message to the user.
-                            Toast.makeText(application.getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            //signUpFailFlag = 1;
+                            Toast.makeText(application.getApplicationContext(), "Authentication failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
     }
 
     public void loginUser(String email, String password) {
@@ -64,8 +68,10 @@ public class AuthAppRepository {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     userLiveData.postValue(mAuth.getCurrentUser());
+                    curAct.startActivity(new Intent(application.getApplicationContext(),UserCreationOnboardingActivity.class));
+                    curAct.finish();
                 } else {
-                    signInFailFlag = 1;
+                    //signInFailFlag = 1;
                     Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
