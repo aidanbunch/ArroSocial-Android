@@ -1,6 +1,5 @@
 package com.aidanbunch.arrosocial.viewmodel;
 
-import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 
@@ -12,25 +11,18 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseUser;
 import com.aidanbunch.arrosocial.model.AuthAppRepository;
 
-public class SignUpViewModel extends AndroidViewModel {
+public class UCOViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
-    public static Activity signUpAct;
 
-
-    public SignUpViewModel(@NonNull Application application) {
+    public UCOViewModel(@NonNull Application application) {
         super(application);
         authAppRepository = new AuthAppRepository(application);
         userLiveData = authAppRepository.getUserLiveData();
     }
 
-    public int getSignUpFailFlag() {
-        return(authAppRepository.getSignUpFailFlag());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.P)
-    public void signUp(String email, String password) {
-        authAppRepository.signUpUser(email, password);
+    public void deleteUser() {
+        authAppRepository.deleteUser();
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {

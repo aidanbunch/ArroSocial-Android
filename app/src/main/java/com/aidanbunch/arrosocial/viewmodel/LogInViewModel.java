@@ -1,5 +1,6 @@
 package com.aidanbunch.arrosocial.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 
@@ -14,6 +15,7 @@ import com.aidanbunch.arrosocial.model.AuthAppRepository;
 public class LogInViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
+    public static Activity logInAct;
 
     public LogInViewModel(@NonNull Application application) {
         super(application);

@@ -2,7 +2,7 @@ package com.aidanbunch.arrosocial.view.onboardingUC;
 
 import android.graphics.drawable.Drawable;
 
-public class UserCreationOnboardingViewModel {
+public class UserCreationOnboardingItem {
     public static int pageCount;
     public static String userNameData;
     public static String firstNameData;

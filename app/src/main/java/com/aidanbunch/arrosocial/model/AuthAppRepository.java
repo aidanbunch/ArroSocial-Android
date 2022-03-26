@@ -2,9 +2,12 @@ package com.aidanbunch.arrosocial.model;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,7 +15,10 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.aidanbunch.arrosocial.view.SignupActivity;
+import com.aidanbunch.arrosocial.view.WelcomeViewActivity;
 import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
+import com.aidanbunch.arrosocial.viewmodel.LogInViewModel;
+import com.aidanbunch.arrosocial.viewmodel.SignUpViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +34,10 @@ public class AuthAppRepository {
     private MutableLiveData<Boolean> loggedOutLiveData;
     private static int signUpFailFlag;
     private static int signInFailFlag;
-    public static Activity curAct;
+    private static Activity logInAct = LogInViewModel.logInAct;
+    private static Activity signUpAct = SignUpViewModel.signUpAct;
+
+    private ProgressDialog progDialog;
 
     public AuthAppRepository(Application application) {
         this.application = application;
@@ -44,17 +53,22 @@ public class AuthAppRepository {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     public void signUpUser(String email, String password) {
+        progDialog = new ProgressDialog(signUpAct);
+        progDialog.setMessage("Signing up...");
+        progDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progDialog.dismiss();
                             userLiveData.postValue(mAuth.getCurrentUser());
-                            curAct.startActivity(new Intent(application.getApplicationContext(),UserCreationOnboardingActivity.class));
-                            curAct.finish();
+                            signUpAct.startActivity(new Intent(application.getApplicationContext(),UserCreationOnboardingActivity.class));
+                            signUpAct.finish();
                         } else {
                             //signUpFailFlag = 1;
+                            progDialog.dismiss();
                             Toast.makeText(application.getApplicationContext(), "Authentication failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -63,16 +77,34 @@ public class AuthAppRepository {
     }
 
     public void loginUser(String email, String password) {
+        progDialog = new ProgressDialog(logInAct);
+        progDialog.setMessage("Logging in...");
+        progDialog.show();
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     userLiveData.postValue(mAuth.getCurrentUser());
-                    curAct.startActivity(new Intent(application.getApplicationContext(),UserCreationOnboardingActivity.class));
-                    curAct.finish();
+                    progDialog.dismiss();
+                    logInAct.startActivity(new Intent(application.getApplicationContext(), WelcomeViewActivity.class));
+                    logInAct.finish();
                 } else {
                     //signInFailFlag = 1;
+                    progDialog.dismiss();
                     Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void deleteUser() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Auth", "User account deleted.");
                 }
             }
         });

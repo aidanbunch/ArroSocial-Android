@@ -15,17 +15,18 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aidanbunch.arrosocial.R;
+import com.aidanbunch.arrosocial.utils.SharedPrefs;
+import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
-import java.util.Random;
 
 public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCreationOnboardingAdapter.OnboardingViewHolder> {
 
-    private List<UserCreationOnboardingViewModel> onboardingItems;
+    private List<UserCreationOnboardingItem> onboardingItems;
     private Context adapterContext;
 
-    public UserCreationOnboardingAdapter(List<UserCreationOnboardingViewModel> onboardingItems) {
+    public UserCreationOnboardingAdapter(List<UserCreationOnboardingItem> onboardingItems) {
         this.onboardingItems = onboardingItems;
     }
 
@@ -68,7 +69,7 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
             onboardingImagePickerTitle = itemView.findViewById(R.id.onboardingImagePickerTitle);
             shuffleBtn = itemView.findViewById(R.id.shuffleBtn);
 
-            if(UserCreationOnboardingViewModel.pageCount == 0) {
+            if(UserCreationOnboardingItem.pageCount == 0) {
                 firstName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -80,11 +81,11 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        UserCreationOnboardingViewModel.userNameData = editable.toString();
+                        UserCreationOnboardingItem.userNameData = editable.toString();
                     }
                 });
             }
-            else if(UserCreationOnboardingViewModel.pageCount == 1) {
+            else if(UserCreationOnboardingItem.pageCount == 1) {
                 firstName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -96,7 +97,7 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        UserCreationOnboardingViewModel.firstNameData = editable.toString();
+                        UserCreationOnboardingItem.firstNameData = editable.toString();
                     }
                 });
             }
@@ -111,19 +112,21 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    UserCreationOnboardingViewModel.lastNameData = editable.toString();
+                    UserCreationOnboardingItem.lastNameData = editable.toString();
                 }
             });
             shuffleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ColorStateList csl = ColorStateList.valueOf(Color.parseColor(generateRandomColor()));
+                    String randColorHex = UtilsMethods.generateRandomColor();
+                    SharedPrefs.instance().storeValueString("generated_profile_picture_background_in_hex", randColorHex);
+                    ColorStateList csl = ColorStateList.valueOf(Color.parseColor(randColorHex));
                     onboardingImagePreview.setBackgroundTintList(csl);
                 }
             });
         }
 
-        void setOnBoardingData(UserCreationOnboardingViewModel onBoardingItem){
+        void setOnBoardingData(UserCreationOnboardingItem onBoardingItem){
             onboardingTitle.setText(onBoardingItem.getOnboardingTitle());
             firstName.setHint(onBoardingItem.getOnboardingFirstName());
             lastName.setHint(onBoardingItem.getOnboardingLastName());
@@ -150,12 +153,6 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
                 onboardingImagePreview.setEnabled(false);
             }
         }
-    }
-
-    public String generateRandomColor() {
-        Random randObj = new Random();
-        int randNum = randObj.nextInt(0xffffff + 1);
-        return String.format("#%06x", randNum);
     }
 }
 

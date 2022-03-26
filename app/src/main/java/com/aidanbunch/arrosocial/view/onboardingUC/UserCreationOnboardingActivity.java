@@ -1,5 +1,6 @@
 package com.aidanbunch.arrosocial.view.onboardingUC;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,31 +8,36 @@ import android.os.Bundle;
 
 import com.aidanbunch.arrosocial.R;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.view.WelcomeViewActivity;
+import com.aidanbunch.arrosocial.viewmodel.UCOViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class UserCreationOnboardingActivity extends AppCompatActivity {
 
@@ -39,11 +45,16 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
     private LinearLayout onboardingLayout;
     private MaterialButton onboardingActionBtn;
     private AppCompatButton onboardingResetBtn;
+    private FirebaseFirestore db;
+    UCOViewModel ucoVM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_creation_onboarding);
+
+        db = FirebaseFirestore.getInstance();
+        ucoVM = new ViewModelProvider(this).get(UCOViewModel.class);
 
         onboardingActionBtn = findViewById(R.id.buttonOnBoarding);
         onboardingResetBtn = findViewById(R.id.onboardingReset);
@@ -79,17 +90,51 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
                 if (onboardingViewPager.getCurrentItem() + 1 < onboardingAdapter.getItemCount()) {
                     onboardingViewPager.setCurrentItem(onboardingViewPager.getCurrentItem() + 1);
                     if (onboardingViewPager.getCurrentItem() == 0) {
-                        UserCreationOnboardingViewModel.pageCount = 0;
+                        UserCreationOnboardingItem.pageCount = 0;
                     } else if (onboardingViewPager.getCurrentItem() == 1) {
-                        UserCreationOnboardingViewModel.pageCount = 1;
+                        UserCreationOnboardingItem.pageCount = 1;
                     }
                 } else {
-                    Log.v("username", UserCreationOnboardingViewModel.userNameData);
-                    Log.v("firstName", UserCreationOnboardingViewModel.firstNameData);
-                    Log.v("lastName", UserCreationOnboardingViewModel.lastNameData);
+                    Log.v("username", UserCreationOnboardingItem.userNameData);
+                    Log.v("firstName", UserCreationOnboardingItem.firstNameData);
+                    Log.v("lastName", UserCreationOnboardingItem.lastNameData);
+
+                    SharedPrefs.instance().storeValueString("username", UserCreationOnboardingItem.userNameData);
+                    SharedPrefs.instance().storeValueString("first_name", UserCreationOnboardingItem.firstNameData);
+                    SharedPrefs.instance().storeValueString("last_name", UserCreationOnboardingItem.lastNameData);
+
+                    Map<String, Object> user = UtilsMethods.addUserFS(SharedPrefs.instance().fetchValueString("first_name"),
+                            SharedPrefs.instance().fetchValueString("last_name"),
+                            SharedPrefs.instance().fetchValueString("username"),
+                            SharedPrefs.instance().fetchValueString("generated_profile_picture_background_in_hex"));
+
+                    db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("FS", "Error adding document", e);
+                                }
+                            });
+
                     startActivity(new Intent(getApplicationContext(), WelcomeViewActivity.class));
                     finish();
                 }
+            }
+        });
+
+        onboardingResetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ucoVM.deleteUser();
+                startActivity(new Intent(getApplicationContext(), WelcomeViewActivity.class));
+                finish();
             }
         });
 
@@ -130,23 +175,23 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
     }
 
     private void setOnboardingItems() {
-        List<UserCreationOnboardingViewModel> onBoardingItems = new ArrayList<>();
+        List<UserCreationOnboardingItem> onBoardingItems = new ArrayList<>();
 
-        UserCreationOnboardingViewModel itemUsername = new UserCreationOnboardingViewModel();
+        UserCreationOnboardingItem itemUsername = new UserCreationOnboardingItem();
         itemUsername.setOnboardingTitle("Pick a username");
         itemUsername.setOnboardingFirstName("Username");
         itemUsername.setLastNameVisibility(1);
         itemUsername.setButtonEnabled(false);
         itemUsername.setImageButtonEnabled(false);
 
-        UserCreationOnboardingViewModel itemFullName = new UserCreationOnboardingViewModel();
+        UserCreationOnboardingItem itemFullName = new UserCreationOnboardingItem();
         itemFullName.setOnboardingTitle("Enter your first and last name");
         itemFullName.setOnboardingFirstName("First Name");
         itemFullName.setOnboardingLastName("Last Name");
         itemFullName.setButtonEnabled(false);
         itemFullName.setImageButtonEnabled(false);
 
-        UserCreationOnboardingViewModel itemProfilePic = new UserCreationOnboardingViewModel();
+        UserCreationOnboardingItem itemProfilePic = new UserCreationOnboardingItem();
         itemProfilePic.setOnboardingImageTitle("Tap on the circle to import your own profile picture");
         itemProfilePic.setOnboardingImagePreview(getResources().getDrawable(R.drawable.image_preview_default));
         itemProfilePic.setButtonText("Shuffle");

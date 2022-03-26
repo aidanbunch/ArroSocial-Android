@@ -42,7 +42,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        AuthAppRepository.curAct = SignupActivity.this;
+        SignUpViewModel.signUpAct = SignupActivity.this;
 
         setupUI(findViewById(R.id.signUpParent));
         setUpActionBar();

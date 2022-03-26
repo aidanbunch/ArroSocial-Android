@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        AuthAppRepository.curAct = LoginActivity.this;
+        LogInViewModel.logInAct = LoginActivity.this;
 
         setupUI(findViewById(R.id.logInParent));
         setUpActionBar();

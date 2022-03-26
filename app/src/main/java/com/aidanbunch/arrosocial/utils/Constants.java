@@ -19,8 +19,8 @@ public class Constants {
     }*/
     public class FSUserData {
         public static final String username = "username";
-        public static final String fName = "firstName";
-        public static final String lName = "lastName";
+        public static final String fName = "first_name";
+        public static final String lName = "last_name";
         public static final String profilePicture = "profile_picture";;
         public static final String userPosts = "user_posts";
         public static final String generatedProfilePictureBackgroundColorInHex = "generated_profile_picture_background_in_hex";

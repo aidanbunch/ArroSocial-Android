@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.aidanbunch.arrosocial.R;
 import com.aidanbunch.arrosocial.utils.Constants;
+import com.aidanbunch.arrosocial.utils.SharedPrefs;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,6 +22,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        SharedPrefs.instance(this.getApplicationContext());
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
