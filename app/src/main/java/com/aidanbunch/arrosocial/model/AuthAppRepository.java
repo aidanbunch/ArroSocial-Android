@@ -1,6 +1,7 @@
 package com.aidanbunch.arrosocial.model;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,11 +14,14 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.aidanbunch.arrosocial.view.CentralActivity;
+import com.aidanbunch.arrosocial.view.welcome.LoginActivity;
 import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
 import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
 import com.aidanbunch.arrosocial.viewmodel.LogInViewModel;
+import com.aidanbunch.arrosocial.viewmodel.RecoverPassViewModel;
 import com.aidanbunch.arrosocial.viewmodel.SignUpViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +37,7 @@ public class AuthAppRepository {
     private static int signInFailFlag;
     private static Activity logInAct = LogInViewModel.logInAct;
     private static Activity signUpAct = SignUpViewModel.signUpAct;
+    private static Activity resetAct = RecoverPassViewModel.resetAct;
 
     private ProgressDialog progDialog;
 
@@ -81,14 +86,13 @@ public class AuthAppRepository {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                progDialog.dismiss();
                 if (task.isSuccessful()) {
                     userLiveData.postValue(mAuth.getCurrentUser());
-                    progDialog.dismiss();
                     logInAct.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
                     logInAct.finish();
                 } else {
                     //signInFailFlag = 1;
-                    progDialog.dismiss();
                     Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -102,6 +106,26 @@ public class AuthAppRepository {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.d("Auth", "User account deleted.");
+                }
+            }
+        });
+    }
+
+    public void recoverPass(String email) {
+        progDialog = new ProgressDialog(logInAct);
+        progDialog.setMessage("Sending reset email...");
+        progDialog.show();
+
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progDialog.dismiss();
+                if(task.isSuccessful()) {
+                    resetAct.startActivity(new Intent(application.getApplicationContext(), LoginActivity.class));
+                    resetAct.finish();
+                }
+                else {
+                    Toast.makeText(application.getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

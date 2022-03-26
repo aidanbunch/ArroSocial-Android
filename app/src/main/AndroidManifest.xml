@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArroSocial">
         <activity
+            android:name=".view.welcome.RecoverPassActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.CentralActivity"
             android:exported="false" />
         <activity

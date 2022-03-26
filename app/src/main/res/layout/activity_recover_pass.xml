@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/forgotPassParent"
+    tools:context=".view.welcome.RecoverPassActivity">
+
+    <TextView
+        android:id="@+id/forgotPass_title"
+        android:layout_width="375dp"
+        android:layout_height="64dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Forgot Password"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="37sp"
+        android:layout_marginTop="150dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/forgotEmFormLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/forgotPass_title"
+        android:layout_marginTop="40dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/forgotEmForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="e-mail address"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/rounded_edittext" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/forgot_btn"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:layout_below="@id/forgotEmFormLayout"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_btn_purple"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Reset"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:focusable="false"/>
+
+    <TextView
+        android:id="@+id/forgotError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="placeholder"
+        android:fontFamily="@font/poppins"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/forgot_btn"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/off_white"/>
+
+
+</RelativeLayout>

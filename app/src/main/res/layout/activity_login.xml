@@ -96,5 +96,18 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/off_white"/>
 
+    <TextView
+        android:id="@+id/LIforgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Forgot your pasword? Click here to reset it."
+        android:fontFamily="@font/poppins"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/signInError"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/purple"/>
+
 
 </RelativeLayout>

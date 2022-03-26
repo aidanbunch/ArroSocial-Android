@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -24,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView signInError;
+    TextView signInError, forgotPass;
     TextInputEditText emailForm, passForm;
     AppCompatButton logInBtn;
     LogInViewModel logInViewModel;
@@ -46,10 +48,19 @@ public class LoginActivity extends AppCompatActivity {
         passForm = findViewById(R.id.LIpassForm);
         signInError = findViewById(R.id.signInError);
         logInBtn = findViewById(R.id.login_btn_2);
+        forgotPass = findViewById(R.id.LIforgotPassword);
 
         logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
 
         mAuth = FirebaseAuth.getInstance();
+
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),RecoverPassActivity.class));
+                finish();
+            }
+        });
 
         passForm.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -71,13 +82,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (email.equals("") || password.equals("")) {
                     UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                    setSignUpError(signInError, "All fields must be entered.");
+                    setSignInError(signInError, "All fields must be entered.");
                 } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                    setSignUpError(signInError, "Invalid email");
+                    setSignInError(signInError, "Invalid email");
                 } else if (!(UtilsMethods.checkPass(password))) {
                     UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                    setSignUpError(signInError, "Invalid password.");
+                    setSignInError(signInError, "Invalid password.");
                 } else {
                     signInError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
                     logInViewModel.signIn(email, password);
@@ -129,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    public void setSignUpError(TextView signUpError, String errorMsg) {
+    public void setSignInError(TextView signUpError, String errorMsg) {
         signUpError.setTextColor(getResources().getColor(Constants.AppColors.red));
         signUpError.setText(errorMsg);
     }
