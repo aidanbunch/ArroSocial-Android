@@ -1,4 +1,4 @@
-package com.aidanbunch.arrosocial.view;
+package com.aidanbunch.arrosocial.view.welcome;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

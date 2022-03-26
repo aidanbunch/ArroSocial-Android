@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/homeNav"
+        android:icon="@drawable/ic_home"
+        android:title="@string/homeNav"
+        app:cnb_backgroundColor="@color/purple"
+        app:cnb_iconColor="@color/white"
+        app:cnb_textColor="@color/white" />
+
+    <item
+        android:id="@+id/msgsNav"
+        android:icon="@drawable/ic_msgs"
+        android:title="@string/messagesNav"
+        app:cnb_backgroundColor="@color/purple"
+        app:cnb_iconColor="@color/white"
+        app:cnb_textColor="@color/white" />
+
+    <item
+        android:id="@+id/searchNav"
+        android:icon="@drawable/ic_search"
+        android:title="@string/searchNav"
+        app:cnb_backgroundColor="@color/purple"
+        app:cnb_iconColor="@color/white"
+        app:cnb_textColor="@color/white" />
+
+    <item
+        android:id="@+id/settingsNav"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settingsNav"
+        app:cnb_backgroundColor="@color/purple"
+        app:cnb_iconColor="@color/white"
+        app:cnb_textColor="@color/white" />
+
+</menu>

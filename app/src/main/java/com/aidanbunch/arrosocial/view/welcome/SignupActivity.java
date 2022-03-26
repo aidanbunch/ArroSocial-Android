@@ -1,4 +1,4 @@
-package com.aidanbunch.arrosocial.view;
+package com.aidanbunch.arrosocial.view.welcome;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,10 +16,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aidanbunch.arrosocial.R;
-import com.aidanbunch.arrosocial.model.AuthAppRepository;
 import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
-import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
 import com.aidanbunch.arrosocial.viewmodel.SignUpViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;

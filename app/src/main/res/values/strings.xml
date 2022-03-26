@@ -5,4 +5,8 @@
     <string name="the_platform_made_for_the_people">The Platform Made for the People</string>
     <string name="learn_more">New around here? <a href="https://www.arro.io">More about Arro Social</a></string>
     <string name="terms_cond_text"><![CDATA[Read our Terms & Conditions]]></string>
+    <string name="homeNav">Home</string>
+    <string name="messagesNav">Messages</string>
+    <string name="searchNav">Search</string>
+    <string name="settingsNav">Settings</string>
 </resources>

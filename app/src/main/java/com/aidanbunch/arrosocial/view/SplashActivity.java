@@ -15,6 +15,7 @@ import android.view.View;
 import com.aidanbunch.arrosocial.R;
 import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.SharedPrefs;
+import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -25,13 +25,13 @@ import android.widget.LinearLayout;
 
 import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
-import com.aidanbunch.arrosocial.view.WelcomeViewActivity;
+import com.aidanbunch.arrosocial.view.CentralActivity;
+import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
 import com.aidanbunch.arrosocial.viewmodel.UCOViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -123,7 +123,7 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
                                 }
                             });
 
-                    startActivity(new Intent(getApplicationContext(), WelcomeViewActivity.class));
+                    startActivity(new Intent(getApplicationContext(), CentralActivity.class));
                     finish();
                 }
             }

@@ -10,13 +10,19 @@
         <entry key="app/src/main/res/drawable/rounded_btn_white.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/rounded_edittext.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/shadows.xml" value="0.2085" />
+        <entry key="app/src/main/res/layout/activity_central.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28384246826171877" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2543182373046875" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.28384246826171877" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_user_creation_onboarding.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2682291666666667" />
+        <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.28384246826171877" />
         <entry key="app/src/main/res/layout/item_container_user_creation_onboarding.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/nav_item.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2085" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2085" />
       </map>

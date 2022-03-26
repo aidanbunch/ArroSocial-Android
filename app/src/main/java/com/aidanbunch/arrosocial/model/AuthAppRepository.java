@@ -3,24 +3,21 @@ package com.aidanbunch.arrosocial.model;
 import android.app.Activity;
 import android.app.Application;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
-import com.aidanbunch.arrosocial.view.SignupActivity;
-import com.aidanbunch.arrosocial.view.WelcomeViewActivity;
+import com.aidanbunch.arrosocial.view.CentralActivity;
+import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
 import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
 import com.aidanbunch.arrosocial.viewmodel.LogInViewModel;
 import com.aidanbunch.arrosocial.viewmodel.SignUpViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,7 +61,7 @@ public class AuthAppRepository {
                         if (task.isSuccessful()) {
                             progDialog.dismiss();
                             userLiveData.postValue(mAuth.getCurrentUser());
-                            signUpAct.startActivity(new Intent(application.getApplicationContext(),UserCreationOnboardingActivity.class));
+                            signUpAct.startActivity(new Intent(application.getApplicationContext(), UserCreationOnboardingActivity.class));
                             signUpAct.finish();
                         } else {
                             //signUpFailFlag = 1;
@@ -87,7 +84,7 @@ public class AuthAppRepository {
                 if (task.isSuccessful()) {
                     userLiveData.postValue(mAuth.getCurrentUser());
                     progDialog.dismiss();
-                    logInAct.startActivity(new Intent(application.getApplicationContext(), WelcomeViewActivity.class));
+                    logInAct.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
                     logInAct.finish();
                 } else {
                     //signInFailFlag = 1;
