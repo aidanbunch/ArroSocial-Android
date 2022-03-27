@@ -15,7 +15,6 @@ import com.aidanbunch.arrosocial.model.AuthAppRepository;
 public class LogInViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
-    public static Activity logInAct;
 
     public LogInViewModel(@NonNull Application application) {
         super(application);
@@ -27,8 +26,8 @@ public class LogInViewModel extends AndroidViewModel {
         return authAppRepository.getSignInFailFlag();
     }
 
-    public void signIn(String email, String password) {
-        authAppRepository.loginUser(email, password);
+    public void signIn(String email, String password, Activity act) {
+        authAppRepository.loginUser(email, password, act);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {

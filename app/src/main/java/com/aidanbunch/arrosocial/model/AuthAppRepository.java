@@ -15,6 +15,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.aidanbunch.arrosocial.view.CentralActivity;
 import com.aidanbunch.arrosocial.view.welcome.LoginActivity;
+import com.aidanbunch.arrosocial.view.welcome.RecoverPassActivity;
 import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
 import com.aidanbunch.arrosocial.view.onboardingUC.UserCreationOnboardingActivity;
 import com.aidanbunch.arrosocial.viewmodel.LogInViewModel;
@@ -35,11 +36,6 @@ public class AuthAppRepository {
     private MutableLiveData<Boolean> loggedOutLiveData;
     private static int signUpFailFlag;
     private static int signInFailFlag;
-    private static Activity logInAct = LogInViewModel.logInAct;
-    private static Activity signUpAct = SignUpViewModel.signUpAct;
-    private static Activity resetAct = RecoverPassViewModel.resetAct;
-
-    private ProgressDialog progDialog;
 
     public AuthAppRepository(Application application) {
         this.application = application;
@@ -54,8 +50,8 @@ public class AuthAppRepository {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void signUpUser(String email, String password) {
-        progDialog = new ProgressDialog(signUpAct);
+    public void signUpUser(String email, String password, Activity act) {
+        ProgressDialog progDialog = new ProgressDialog(act);
         progDialog.setMessage("Signing up...");
         progDialog.show();
 
@@ -63,14 +59,13 @@ public class AuthAppRepository {
                 .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progDialog.dismiss();
                         if (task.isSuccessful()) {
-                            progDialog.dismiss();
                             userLiveData.postValue(mAuth.getCurrentUser());
-                            signUpAct.startActivity(new Intent(application.getApplicationContext(), UserCreationOnboardingActivity.class));
-                            signUpAct.finish();
+                            act.startActivity(new Intent(application.getApplicationContext(), UserCreationOnboardingActivity.class));
+                            act.finish();
                         } else {
                             //signUpFailFlag = 1;
-                            progDialog.dismiss();
                             Toast.makeText(application.getApplicationContext(), "Authentication failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -78,8 +73,8 @@ public class AuthAppRepository {
 
     }
 
-    public void loginUser(String email, String password) {
-        progDialog = new ProgressDialog(logInAct);
+    public void loginUser(String email, String password, Activity act) {
+        ProgressDialog progDialog = new ProgressDialog(act);
         progDialog.setMessage("Logging in...");
         progDialog.show();
 
@@ -89,8 +84,8 @@ public class AuthAppRepository {
                 progDialog.dismiss();
                 if (task.isSuccessful()) {
                     userLiveData.postValue(mAuth.getCurrentUser());
-                    logInAct.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
-                    logInAct.finish();
+                    act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
+                    act.finish();
                 } else {
                     //signInFailFlag = 1;
                     Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -111,9 +106,9 @@ public class AuthAppRepository {
         });
     }
 
-    public void recoverPass(String email) {
-        progDialog = new ProgressDialog(resetAct);
-        progDialog.setMessage("Sending reset email...");
+    public void recoverPass(String email, Activity act) {
+        ProgressDialog progDialog = new ProgressDialog(act);
+        progDialog.setMessage("Logging in...");
         progDialog.show();
 
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -121,10 +116,12 @@ public class AuthAppRepository {
             public void onComplete(@NonNull Task<Void> task) {
                 progDialog.dismiss();
                 if(task.isSuccessful()) {
-                    resetAct.startActivity(new Intent(application.getApplicationContext(), LoginActivity.class));
-                    resetAct.finish();
+                    act.startActivity(new Intent(application.getApplicationContext(), LoginActivity.class));
+                    act.finish();
+                    RecoverPassViewModel.flag = true;
                 }
                 else {
+                    RecoverPassViewModel.flag = false;
                     Toast.makeText(application.getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

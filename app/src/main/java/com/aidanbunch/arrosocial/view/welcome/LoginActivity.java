@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        LogInViewModel.logInAct = LoginActivity.this;
+        Activity logInAct = LoginActivity.this;
 
         setupUI(findViewById(R.id.logInParent));
         setUpActionBar();
@@ -58,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), RecoverPassActivity.class));
-                finish();
             }
         });
 
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     setSignInError(signInError, "Invalid password.");
                 } else {
                     signInError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    logInViewModel.signIn(email, password);
+                    logInViewModel.signIn(email, password, logInAct);
                 }
             }
         });

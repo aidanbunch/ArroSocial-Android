@@ -15,8 +15,6 @@ import com.aidanbunch.arrosocial.model.AuthAppRepository;
 public class SignUpViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
-    public static Activity signUpAct;
-
 
     public SignUpViewModel(@NonNull Application application) {
         super(application);
@@ -29,8 +27,8 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void signUp(String email, String password) {
-        authAppRepository.signUpUser(email, password);
+    public void signUp(String email, String password, Activity act) {
+        authAppRepository.signUpUser(email, password, act);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {

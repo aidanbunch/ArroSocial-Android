@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -37,7 +38,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        SignUpViewModel.signUpAct = SignupActivity.this;
+        Activity signUpAct = SignupActivity.this;
 
         setupUI(findViewById(R.id.signUpParent));
         setUpActionBar();
@@ -87,16 +88,7 @@ public class SignupActivity extends AppCompatActivity {
                     setSignUpError(signUpError, "Password needs at least 6 characters, a number, a capital letter and a lowercase letter.");
                 } else {
                     signUpError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    signUpViewModel.signUp(email, password);
-                    /*if(signUpViewModel.getSignUpFailFlag() == 1) {
-                        setSignUpError(signUpError, "Authentication failed.");
-                        Log.v("DEBUG", "sign-up failed");
-                    }
-                    else {
-                        Log.v("DEBUG", "sign-up succeeded");
-                        startActivity(new Intent(SignupActivity.this, UserCreationOnboardingActivity.class));
-                        finish();
-                    }*/
+                    signUpViewModel.signUp(email, password, signUpAct);
 
                 }
             }

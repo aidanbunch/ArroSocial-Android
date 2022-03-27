@@ -15,7 +15,7 @@ import com.aidanbunch.arrosocial.model.AuthAppRepository;
 public class RecoverPassViewModel extends AndroidViewModel {
     private AuthAppRepository authAppRepository;
     private MutableLiveData<FirebaseUser> userLiveData;
-    public static Activity resetAct;
+    public static boolean flag;
 
     public RecoverPassViewModel(@NonNull Application application) {
         super(application);
@@ -27,8 +27,8 @@ public class RecoverPassViewModel extends AndroidViewModel {
         return authAppRepository.getSignInFailFlag();
     }
 
-    public void recoverPass(String email) {
-        authAppRepository.recoverPass(email);
+    public void recoverPass(String email, Activity act) {
+        authAppRepository.recoverPass(email, act);
     }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {

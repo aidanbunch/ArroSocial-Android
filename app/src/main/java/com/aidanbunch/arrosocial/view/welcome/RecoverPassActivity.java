@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class RecoverPassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recover_pass);
 
         recoverPassVM = new ViewModelProvider(this).get(RecoverPassViewModel.class);
-        RecoverPassViewModel.resetAct = RecoverPassActivity.this;
+        Activity resetAct = RecoverPassActivity.this;
         mAuth = FirebaseAuth.getInstance();
 
         setupUI(findViewById(R.id.forgotPassParent));
@@ -48,6 +49,7 @@ public class RecoverPassActivity extends AppCompatActivity {
         resetError = findViewById(R.id.forgotError);
         resetBtn = findViewById(R.id.forgot_btn);
         emForm = findViewById(R.id.forgotEmForm);
+        ProgressDialog progDialog = new ProgressDialog(this);
 
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +64,10 @@ public class RecoverPassActivity extends AppCompatActivity {
                 }
                 else {
                     resetError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    recoverPass(email);
+                    progDialog.setMessage("Sending reset email...");
+                    progDialog.show();
+                    recoverPassVM.recoverPass(email, resetAct);
+                    progDialog.dismiss();
                 }
         }});
     }
@@ -114,24 +119,5 @@ public class RecoverPassActivity extends AppCompatActivity {
         signUpError.setText(errorMsg);
     }
 
-    public void recoverPass(String email) {
-        ProgressDialog progDialog = new ProgressDialog(this);
-        progDialog.setMessage("Sending reset email...");
-        progDialog.show();
-
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                progDialog.dismiss();
-                if(task.isSuccessful()) {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                    finish();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 }
 
