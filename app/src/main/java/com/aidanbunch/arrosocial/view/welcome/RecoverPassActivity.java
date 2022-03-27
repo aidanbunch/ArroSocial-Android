@@ -1,22 +1,29 @@
 package com.aidanbunch.arrosocial.view.welcome;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aidanbunch.arrosocial.R;
 import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.viewmodel.RecoverPassViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RecoverPassActivity extends AppCompatActivity {
 
@@ -24,6 +31,7 @@ public class RecoverPassActivity extends AppCompatActivity {
     private AppCompatButton resetBtn;
     private TextInputEditText emForm;
     RecoverPassViewModel recoverPassVM;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +40,8 @@ public class RecoverPassActivity extends AppCompatActivity {
 
         recoverPassVM = new ViewModelProvider(this).get(RecoverPassViewModel.class);
         RecoverPassViewModel.resetAct = RecoverPassActivity.this;
+        mAuth = FirebaseAuth.getInstance();
+
         setupUI(findViewById(R.id.forgotPassParent));
         setUpActionBar();
 
@@ -52,7 +62,7 @@ public class RecoverPassActivity extends AppCompatActivity {
                 }
                 else {
                     resetError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    recoverPassVM.recoverPass(email);
+                    recoverPass(email);
                 }
         }});
     }
@@ -102,6 +112,26 @@ public class RecoverPassActivity extends AppCompatActivity {
     public void setResetError(TextView signUpError, String errorMsg) {
         signUpError.setTextColor(getResources().getColor(Constants.AppColors.red));
         signUpError.setText(errorMsg);
+    }
+
+    public void recoverPass(String email) {
+        ProgressDialog progDialog = new ProgressDialog(this);
+        progDialog.setMessage("Sending reset email...");
+        progDialog.show();
+
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progDialog.dismiss();
+                if(task.isSuccessful()) {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    finish();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
 

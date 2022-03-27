@@ -112,7 +112,7 @@ public class AuthAppRepository {
     }
 
     public void recoverPass(String email) {
-        progDialog = new ProgressDialog(logInAct);
+        progDialog = new ProgressDialog(resetAct);
         progDialog.setMessage("Sending reset email...");
         progDialog.show();
 
