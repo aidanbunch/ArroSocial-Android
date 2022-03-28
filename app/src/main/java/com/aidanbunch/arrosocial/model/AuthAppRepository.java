@@ -10,9 +10,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
+import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.view.CentralActivity;
 import com.aidanbunch.arrosocial.view.welcome.LoginActivity;
 import com.aidanbunch.arrosocial.view.welcome.RecoverPassActivity;
@@ -23,23 +25,35 @@ import com.aidanbunch.arrosocial.viewmodel.RecoverPassViewModel;
 import com.aidanbunch.arrosocial.viewmodel.SignUpViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class AuthAppRepository {
     private Application application;
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private MutableLiveData<FirebaseUser> userLiveData;
     private MutableLiveData<Boolean> loggedOutLiveData;
-    private static int signUpFailFlag;
-    private static int signInFailFlag;
 
     public AuthAppRepository(Application application) {
         this.application = application;
         this.mAuth = FirebaseAuth.getInstance();
+        this.db = FirebaseFirestore.getInstance();
         this.userLiveData = new MutableLiveData<>();
         this.loggedOutLiveData = new MutableLiveData<>();
 
@@ -108,7 +122,7 @@ public class AuthAppRepository {
 
     public void recoverPass(String email, Activity act) {
         ProgressDialog progDialog = new ProgressDialog(act);
-        progDialog.setMessage("Logging in...");
+        progDialog.setMessage("Sending reset email...");
         progDialog.show();
 
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -128,18 +142,52 @@ public class AuthAppRepository {
         });
     }
 
+    public void addUserToDb(Map<String, Object> user, Activity act) {
+        db.collection(Constants.FSCollections.users)
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
+                        act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
+                        act.finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("FS", "Error adding document", e);
+                        Toast.makeText(application.getApplicationContext(), "Error adding document.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public void checkUserInDb(String user) {
+        String cleanedUser = user.trim();
+
+        Query dbRef = db.collection(Constants.FSCollections.users).whereEqualTo(Constants.FSUserData.username, cleanedUser).limit(1);
+
+        dbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for (DocumentSnapshot ds: documentSnapshots){
+                    if (ds!=null){
+                        Log.d("checkUser", "checkingIfusernameExist: FOUND A MATCH");
+                        Toast.makeText(application.getApplicationContext(), "That username already exists.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Log.d("checkUser", "checkingIfusernameExist: FOUND NO MATCH");
+                    }
+                }
+            }
+        });
+    }
+
     public void logOut() {
         mAuth.signOut();
         loggedOutLiveData.postValue(true);
     }
 
-    public int getSignUpFailFlag() {
-        return signUpFailFlag;
-    }
-
-    public int getSignInFailFlag() {
-        return signInFailFlag;
-    }
 
     public MutableLiveData<FirebaseUser> getUserLiveData() {
         return userLiveData;

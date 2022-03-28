@@ -8,7 +8,7 @@
 
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/chipNav"
-        android:layout_width="370dp"
+        android:layout_width="380dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:translationZ="90dp"

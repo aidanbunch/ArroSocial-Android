@@ -38,4 +38,9 @@ public class SharedPrefs {
     public String fetchValueString(String key) {
         return sharedPref.getString(key, null);
     }
+
+    public void resetSharedPrefs() {
+        sharedPrefEditor.clear();
+        sharedPrefEditor.commit();
+    }
 }

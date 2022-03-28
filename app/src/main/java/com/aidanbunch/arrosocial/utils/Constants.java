@@ -14,16 +14,16 @@ public class Constants {
         public static final int off_white = R.color.off_white;
         public static final int purple = R.color.purple;
     }
-    /*public class FSCollections {
-
-    }*/
+    public class FSCollections {
+        public static final String users = "users";
+    }
     public class FSUserData {
         public static final String username = "username";
         public static final String fName = "first_name";
         public static final String lName = "last_name";
         public static final String profilePicture = "profile_picture";;
         public static final String userPosts = "user_posts";
-        public static final String generatedProfilePictureBackgroundColorInHex = "generated_profile_picture_background_in_hex";
+        public static final String profilePicHex = "generated_profile_picture_background_in_hex";
     }
     /*public class FSPostFields {
 

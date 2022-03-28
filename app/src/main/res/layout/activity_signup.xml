@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="e-mail address"
+            android:textColor="@color/black"
             android:inputType="textEmailAddress"
             android:background="@drawable/rounded_edittext" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -51,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="password"
+            android:textColor="@color/black"
             android:inputType="textPassword"
             android:background="@drawable/rounded_edittext"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -69,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="re-enter password"
+            android:textColor="@color/black"
             android:inputType="textPassword"
             android:background="@drawable/rounded_edittext"
             android:imeOptions="actionSend"/>

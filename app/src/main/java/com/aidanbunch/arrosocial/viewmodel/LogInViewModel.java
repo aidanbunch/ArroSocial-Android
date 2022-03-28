@@ -22,10 +22,6 @@ public class LogInViewModel extends AndroidViewModel {
         userLiveData = authAppRepository.getUserLiveData();
     }
 
-    public int getSignInFailFlag() {
-        return authAppRepository.getSignInFailFlag();
-    }
-
     public void signIn(String email, String password, Activity act) {
         authAppRepository.loginUser(email, password, act);
     }

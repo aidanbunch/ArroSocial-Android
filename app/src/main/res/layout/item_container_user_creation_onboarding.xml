@@ -7,6 +7,7 @@
     android:layout_marginBottom="50dp"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@color/off_white"
     android:id="@+id/onboardingLayout"
     android:padding="20dp">
 

@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="e-mail address"
+            android:textColor="@color/black"
             android:inputType="textEmailAddress"
             android:background="@drawable/rounded_edittext" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -50,6 +51,7 @@
             android:id="@+id/LIpassForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:hint="password"
             android:inputType="textPassword"
             android:background="@drawable/rounded_edittext"/>

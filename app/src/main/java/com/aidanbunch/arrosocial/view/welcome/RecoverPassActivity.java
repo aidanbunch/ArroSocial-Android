@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,16 @@ public class RecoverPassActivity extends AppCompatActivity {
         resetError = findViewById(R.id.forgotError);
         resetBtn = findViewById(R.id.forgot_btn);
         emForm = findViewById(R.id.forgotEmForm);
-        ProgressDialog progDialog = new ProgressDialog(this);
+
+        emForm.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (i == 66) {
+                    UtilsMethods.hideSoftKeyboard(RecoverPassActivity.this, view);
+                }
+                return false;
+            }
+        });
 
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,10 +74,7 @@ public class RecoverPassActivity extends AppCompatActivity {
                 }
                 else {
                     resetError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    progDialog.setMessage("Sending reset email...");
-                    progDialog.show();
                     recoverPassVM.recoverPass(email, resetAct);
-                    progDialog.dismiss();
                 }
         }});
     }

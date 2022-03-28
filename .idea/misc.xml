@@ -10,10 +10,10 @@
         <entry key="app/src/main/res/drawable/rounded_btn_white.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/rounded_edittext.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/shadows.xml" value="0.2085" />
-        <entry key="app/src/main/res/layout/activity_central.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_central.xml" value="0.30468902587890623" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28384246826171877" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2543182373046875" />
-        <entry key="app/src/main/res/layout/activity_recover_pass.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/activity_recover_pass.xml" value="0.28384246826171877" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.28384246826171877" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.1" />

@@ -59,7 +59,6 @@ public class SignupActivity extends AppCompatActivity {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (i == 66) {
                     UtilsMethods.hideSoftKeyboard(SignupActivity.this, view);
-                    signUpBtn.performClick();
                 }
                 return false;
             }

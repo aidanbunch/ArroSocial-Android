@@ -22,10 +22,6 @@ public class SignUpViewModel extends AndroidViewModel {
         userLiveData = authAppRepository.getUserLiveData();
     }
 
-    public int getSignUpFailFlag() {
-        return(authAppRepository.getSignUpFailFlag());
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.P)
     public void signUp(String email, String password, Activity act) {
         authAppRepository.signUpUser(email, password, act);

@@ -1,6 +1,7 @@
 package com.aidanbunch.arrosocial.view.onboardingUC;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,22 +23,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.view.CentralActivity;
 import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
 import com.aidanbunch.arrosocial.viewmodel.UCOViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserCreationOnboardingActivity extends AppCompatActivity {
 
@@ -95,36 +108,38 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
                         UserCreationOnboardingItem.pageCount = 1;
                     }
                 } else {
-                    Log.v("username", UserCreationOnboardingItem.userNameData);
-                    Log.v("firstName", UserCreationOnboardingItem.firstNameData);
-                    Log.v("lastName", UserCreationOnboardingItem.lastNameData);
+                    if(!(UserCreationOnboardingItem.userNameData == null || UserCreationOnboardingItem.firstNameData == null || UserCreationOnboardingItem.lastNameData == null)) {
 
-                    SharedPrefs.instance().storeValueString("username", UserCreationOnboardingItem.userNameData);
-                    SharedPrefs.instance().storeValueString("first_name", UserCreationOnboardingItem.firstNameData);
-                    SharedPrefs.instance().storeValueString("last_name", UserCreationOnboardingItem.lastNameData);
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.username, UserCreationOnboardingItem.userNameData.trim());
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, UserCreationOnboardingItem.firstNameData.trim());
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, UserCreationOnboardingItem.lastNameData.trim());
 
-                    Map<String, Object> user = UtilsMethods.addUserFS(SharedPrefs.instance().fetchValueString("first_name"),
-                            SharedPrefs.instance().fetchValueString("last_name"),
-                            SharedPrefs.instance().fetchValueString("username"),
-                            SharedPrefs.instance().fetchValueString("generated_profile_picture_background_in_hex"));
+                        Map<String, Object> user = UtilsMethods.createUserMap(SharedPrefs.instance().fetchValueString(Constants.FSUserData.fName),
+                                SharedPrefs.instance().fetchValueString(Constants.FSUserData.lName),
+                                SharedPrefs.instance().fetchValueString(Constants.FSUserData.username),
+                                SharedPrefs.instance().fetchValueString(Constants.FSUserData.profilePicHex));
 
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("FS", "Error adding document", e);
-                                }
-                            });
-
-                    startActivity(new Intent(getApplicationContext(), CentralActivity.class));
-                    finish();
+                        db.collection(Constants.FSCollections.users)
+                                .add(user)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        startActivity(new Intent(getApplicationContext(), CentralActivity.class));
+                                        finish();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("FS", "Error adding document", e);
+                                        Toast.makeText(getApplicationContext(), "Error adding document.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "One or more fields were blank. ", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

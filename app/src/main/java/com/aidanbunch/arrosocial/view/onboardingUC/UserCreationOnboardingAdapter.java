@@ -115,6 +115,7 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
                     UserCreationOnboardingItem.lastNameData = editable.toString();
                 }
             });
+            SharedPrefs.instance().storeValueString("generated_profile_picture_background_in_hex", "#7927e7");
             shuffleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

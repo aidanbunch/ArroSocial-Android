@@ -7,6 +7,7 @@ public class UserCreationOnboardingItem {
     public static String userNameData;
     public static String firstNameData;
     public static String lastNameData;
+    public static boolean userExists;
     private String onboardingTitle;
     private String onboardingFirstName;
     private String onboardingLastName;

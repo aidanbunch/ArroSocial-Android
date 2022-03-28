@@ -51,7 +51,7 @@ public class UtilsMethods {
         return String.format("#%06x", randNum);
     }
 
-    public static Map<String, Object> addUserFS(String first, String last, String username, String hex) {
+    public static Map<String, Object> createUserMap(String first, String last, String username, String hex) {
         Map<String, Object> user = new HashMap<>();
         user.put("first_name", first);
         user.put("last_name", last);

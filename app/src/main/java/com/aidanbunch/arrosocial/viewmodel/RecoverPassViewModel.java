@@ -23,10 +23,6 @@ public class RecoverPassViewModel extends AndroidViewModel {
         userLiveData = authAppRepository.getUserLiveData();
     }
 
-    public int getSignInFailFlag() {
-        return authAppRepository.getSignInFailFlag();
-    }
-
     public void recoverPass(String email, Activity act) {
         authAppRepository.recoverPass(email, act);
     }
