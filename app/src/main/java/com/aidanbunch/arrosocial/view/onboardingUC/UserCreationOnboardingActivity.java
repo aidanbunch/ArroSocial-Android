@@ -110,7 +110,7 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
                 } else {
                     if(!(UserCreationOnboardingItem.userNameData == null || UserCreationOnboardingItem.firstNameData == null || UserCreationOnboardingItem.lastNameData == null)) {
 
-                        SharedPrefs.instance().storeValueString(Constants.FSUserData.username, UserCreationOnboardingItem.userNameData.trim());
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.username, UserCreationOnboardingItem.userNameData.trim().toLowerCase());
                         SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, UserCreationOnboardingItem.firstNameData.trim());
                         SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, UserCreationOnboardingItem.lastNameData.trim());
 

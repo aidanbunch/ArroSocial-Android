@@ -24,8 +24,7 @@
             android:exported="false" />
         <activity
             android:name=".view.welcome.WelcomeViewActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Splash"/>
+            android:exported="false" />
         <activity
             android:name=".view.welcome.SignupActivity"
             android:exported="false" />

@@ -4,25 +4,32 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.TransitionAdapter;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.aidanbunch.arrosocial.R;
 import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.view.welcome.WelcomeViewActivity;
+import com.aidanbunch.arrosocial.viewmodel.SplashViewModel;
 
 public class SplashActivity extends AppCompatActivity {
+
+    SplashViewModel splashVM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        splashVM = new ViewModelProvider(this).get(SplashViewModel.class);
 
         SharedPrefs.instance(this.getApplicationContext());
 
@@ -50,9 +57,16 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
                 colorAnimation.start();
-                startActivity(new Intent(SplashActivity.this, WelcomeViewActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
+                if (SharedPrefs.instance().fetchValueString(Constants.FSUserData.username) == null) {
+                    startActivity(new Intent(SplashActivity.this, WelcomeViewActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                } else {
+                    Log.d("IMPORTANT", SharedPrefs.instance().fetchValueString(Constants.FSUserData.username));
+                    startActivity(new Intent(SplashActivity.this, CentralActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                }
             }
             public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
             }

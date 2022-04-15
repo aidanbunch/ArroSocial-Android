@@ -53,10 +53,10 @@ public class UtilsMethods {
 
     public static Map<String, Object> createUserMap(String first, String last, String username, String hex) {
         Map<String, Object> user = new HashMap<>();
-        user.put("first_name", first);
-        user.put("last_name", last);
-        user.put("username", username);
-        user.put("generated_profile_picture_background_in_hex", hex);
+        user.put(Constants.FSUserData.username, username);
+        user.put(Constants.FSUserData.fName, first);
+        user.put(Constants.FSUserData.lName, last);
+        user.put(Constants.FSUserData.profilePicHex, hex);
         return user;
     }
 

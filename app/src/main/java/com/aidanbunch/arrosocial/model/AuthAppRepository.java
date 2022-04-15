@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import com.aidanbunch.arrosocial.utils.Constants;
+import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.view.CentralActivity;
 import com.aidanbunch.arrosocial.view.welcome.LoginActivity;
 import com.aidanbunch.arrosocial.view.welcome.RecoverPassActivity;
@@ -60,6 +61,7 @@ public class AuthAppRepository {
         if (mAuth.getCurrentUser() != null) {
             userLiveData.postValue(mAuth.getCurrentUser());
             loggedOutLiveData.postValue(false);
+            setUserProperties();
         }
     }
 
@@ -98,10 +100,10 @@ public class AuthAppRepository {
                 progDialog.dismiss();
                 if (task.isSuccessful()) {
                     userLiveData.postValue(mAuth.getCurrentUser());
+                    setUserProperties();
                     act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
                     act.finish();
                 } else {
-                    //signInFailFlag = 1;
                     Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -118,6 +120,7 @@ public class AuthAppRepository {
                 }
             }
         });
+        SharedPrefs.instance().resetSharedPrefs();
     }
 
     public void recoverPass(String email, Activity act) {
@@ -132,10 +135,8 @@ public class AuthAppRepository {
                 if(task.isSuccessful()) {
                     act.startActivity(new Intent(application.getApplicationContext(), LoginActivity.class));
                     act.finish();
-                    RecoverPassViewModel.flag = true;
                 }
                 else {
-                    RecoverPassViewModel.flag = false;
                     Toast.makeText(application.getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -163,7 +164,7 @@ public class AuthAppRepository {
     }
 
     public void checkUserInDb(String user) {
-        String cleanedUser = user.trim();
+        String cleanedUser = user.trim().toLowerCase();
 
         Query dbRef = db.collection(Constants.FSCollections.users).whereEqualTo(Constants.FSUserData.username, cleanedUser).limit(1);
 
@@ -181,6 +182,31 @@ public class AuthAppRepository {
                 }
             }
         });
+    }
+
+    public void setUserProperties() {
+
+        if (userLiveData.getValue() != null) {
+            String uid = userLiveData.getValue().getUid();
+
+            db.collection(Constants.FSCollections.users).document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()) {
+                        Map<String, Object> user = task.getResult().getData();
+                        if (user != null) {
+                            SharedPrefs.instance().storeValueString(Constants.FSUserData.username, (String) user.get(Constants.FSUserData.username));
+                            SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, (String) user.get(Constants.FSUserData.fName));
+                            SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, (String) user.get(Constants.FSUserData.lName));
+                            SharedPrefs.instance().storeValueString(Constants.FSUserData.profilePicHex, (String) user.get(Constants.FSUserData.profilePicHex));
+                        }
+                    }
+                    else {
+                        Toast.makeText(application.getApplicationContext(), "User data could not be retrieved, please try again.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     public void logOut() {
