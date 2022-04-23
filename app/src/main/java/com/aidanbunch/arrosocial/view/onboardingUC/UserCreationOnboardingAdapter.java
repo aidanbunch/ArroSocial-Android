@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aidanbunch.arrosocial.R;
+import com.aidanbunch.arrosocial.utils.Constants;
 import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,9 +36,8 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
     public UserCreationOnboardingAdapter.OnboardingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_container_user_creation_onboarding, parent, false);
         adapterContext = parent.getContext(); //to get the activity context use this line.
-        OnboardingViewHolder dataObjectHolder = new OnboardingViewHolder(view); //in this way you can use the holder object.
-
-        return dataObjectHolder;
+        SharedPrefs.instance(adapterContext);
+        return new OnboardingViewHolder(view);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
             onboardingImagePickerTitle = itemView.findViewById(R.id.onboardingImagePickerTitle);
             shuffleBtn = itemView.findViewById(R.id.shuffleBtn);
 
-            if(UserCreationOnboardingItem.pageCount == 0) {
+            //if(UserCreationOnboardingItem.pageCount == 0) {
                 firstName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -81,11 +81,17 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        UserCreationOnboardingItem.userNameData = editable.toString();
+                        if(UserCreationOnboardingItem.pageCount == 0) {
+                            UserCreationOnboardingItem.userNameData = editable.toString();
+                        }
+                        else if(UserCreationOnboardingItem.pageCount == 1) {
+                            UserCreationOnboardingItem.firstNameData = editable.toString();
+                        }
+                        //UserCreationOnboardingItem.userNameData = editable.toString();
                     }
                 });
-            }
-            else if(UserCreationOnboardingItem.pageCount == 1) {
+            //}
+            /*else if(UserCreationOnboardingItem.pageCount == 1) {
                 firstName.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,7 +106,7 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
                         UserCreationOnboardingItem.firstNameData = editable.toString();
                     }
                 });
-            }
+            }*/
             lastName.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -115,12 +121,12 @@ public class UserCreationOnboardingAdapter extends RecyclerView.Adapter<UserCrea
                     UserCreationOnboardingItem.lastNameData = editable.toString();
                 }
             });
-            SharedPrefs.instance().storeValueString("generated_profile_picture_background_in_hex", "#7927e7");
+            SharedPrefs.instance().storeValueString(Constants.FSUserData.profilePicHex, "#7927e7");
             shuffleBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String randColorHex = UtilsMethods.generateRandomColor();
-                    SharedPrefs.instance().storeValueString("generated_profile_picture_background_in_hex", randColorHex);
+                    SharedPrefs.instance().storeValueString(Constants.FSUserData.profilePicHex, randColorHex);
                     ColorStateList csl = ColorStateList.valueOf(Color.parseColor(randColorHex));
                     onboardingImagePreview.setBackgroundTintList(csl);
                 }

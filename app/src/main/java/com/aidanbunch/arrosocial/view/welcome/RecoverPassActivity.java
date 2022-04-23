@@ -33,7 +33,6 @@ public class RecoverPassActivity extends AppCompatActivity {
     private AppCompatButton resetBtn;
     private TextInputEditText emForm;
     RecoverPassViewModel recoverPassVM;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,7 @@ public class RecoverPassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recover_pass);
 
         recoverPassVM = new ViewModelProvider(this).get(RecoverPassViewModel.class);
-        Activity resetAct = RecoverPassActivity.this;
-        mAuth = FirebaseAuth.getInstance();
+        Activity recoverPassAct = RecoverPassActivity.this;
 
         setupUI(findViewById(R.id.forgotPassParent));
         setUpActionBar();
@@ -61,22 +59,20 @@ public class RecoverPassActivity extends AppCompatActivity {
             }
         });
 
-        resetBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = emForm.getText().toString().trim();
-                if (email.equals("")) {
-                    UtilsMethods.hideSoftKeyboard(RecoverPassActivity.this, view);
-                    setResetError(resetError, "All fields must be entered.");
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    UtilsMethods.hideSoftKeyboard(RecoverPassActivity.this, view);
-                    setResetError(resetError, "Invalid email");
-                }
-                else {
-                    resetError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    recoverPassVM.recoverPass(email, resetAct);
-                }
-        }});
+        resetBtn.setOnClickListener(view -> {
+            String email = emForm.getText().toString().trim().toLowerCase();
+            if (email.equals("")) {
+                UtilsMethods.hideSoftKeyboard(RecoverPassActivity.this, view);
+                setResetError(resetError, "All fields must be entered.");
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                UtilsMethods.hideSoftKeyboard(RecoverPassActivity.this, view);
+                setResetError(resetError, "Invalid email");
+            }
+            else {
+                resetError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
+                recoverPassVM.recoverPass(email, recoverPassAct);
+            }
+    });
     }
 
     @Override

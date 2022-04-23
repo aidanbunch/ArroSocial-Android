@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
         splashVM = new ViewModelProvider(this).get(SplashViewModel.class);
 
-        SharedPrefs.instance(this.getApplicationContext());
+        SharedPrefs.instance(getApplicationContext());
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -50,14 +50,10 @@ public class SplashActivity extends AppCompatActivity {
                 int colorTo = getResources().getColor(Constants.AppColors.off_white);
                 ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
                 colorAnimation.setDuration(400);
-                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        motionLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue());
-                    }
-                });
+                colorAnimation.addUpdateListener(valueAnimator -> motionLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
                 colorAnimation.start();
                 if (SharedPrefs.instance().fetchValueString(Constants.FSUserData.username) == null) {
+                    Log.d("IMPORTANT", "nothing");
                     startActivity(new Intent(SplashActivity.this, WelcomeViewActivity.class));
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();

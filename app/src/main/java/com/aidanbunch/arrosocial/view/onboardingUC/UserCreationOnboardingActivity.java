@@ -97,60 +97,54 @@ public class UserCreationOnboardingActivity extends AppCompatActivity {
             }
         });
 
-        onboardingActionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onboardingViewPager.getCurrentItem() + 1 < onboardingAdapter.getItemCount()) {
-                    onboardingViewPager.setCurrentItem(onboardingViewPager.getCurrentItem() + 1);
-                    if (onboardingViewPager.getCurrentItem() == 0) {
-                        UserCreationOnboardingItem.pageCount = 0;
-                    } else if (onboardingViewPager.getCurrentItem() == 1) {
-                        UserCreationOnboardingItem.pageCount = 1;
-                    }
-                } else {
-                    if(!(UserCreationOnboardingItem.userNameData == null || UserCreationOnboardingItem.firstNameData == null || UserCreationOnboardingItem.lastNameData == null)) {
+        onboardingActionBtn.setOnClickListener(view -> {
+            if (onboardingViewPager.getCurrentItem() + 1 < onboardingAdapter.getItemCount()) {
+                onboardingViewPager.setCurrentItem(onboardingViewPager.getCurrentItem() + 1);
+                if (onboardingViewPager.getCurrentItem() == 0) {
+                    UserCreationOnboardingItem.pageCount = 0;
+                } else if (onboardingViewPager.getCurrentItem() == 1) {
+                    UserCreationOnboardingItem.pageCount = 1;
+                }
+            } else {
+                if(!(UserCreationOnboardingItem.userNameData == null || UserCreationOnboardingItem.firstNameData == null || UserCreationOnboardingItem.lastNameData == null)) {
 
-                        SharedPrefs.instance().storeValueString(Constants.FSUserData.username, UserCreationOnboardingItem.userNameData.trim().toLowerCase());
-                        SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, UserCreationOnboardingItem.firstNameData.trim());
-                        SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, UserCreationOnboardingItem.lastNameData.trim());
+                    SharedPrefs.instance().storeValueString(Constants.FSUserData.username, UserCreationOnboardingItem.userNameData.trim().toLowerCase());
+                    SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, UserCreationOnboardingItem.firstNameData.trim());
+                    SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, UserCreationOnboardingItem.lastNameData.trim());
 
-                        Map<String, Object> user = UtilsMethods.createUserMap(SharedPrefs.instance().fetchValueString(Constants.FSUserData.fName),
-                                SharedPrefs.instance().fetchValueString(Constants.FSUserData.lName),
-                                SharedPrefs.instance().fetchValueString(Constants.FSUserData.username),
-                                SharedPrefs.instance().fetchValueString(Constants.FSUserData.profilePicHex));
+                    Map<String, Object> user = UtilsMethods.createUserMap(SharedPrefs.instance().fetchValueString(Constants.FSUserData.fName),
+                            SharedPrefs.instance().fetchValueString(Constants.FSUserData.lName),
+                            SharedPrefs.instance().fetchValueString(Constants.FSUserData.username),
+                            SharedPrefs.instance().fetchValueString(Constants.FSUserData.profilePicHex));
 
-                        db.collection(Constants.FSCollections.users)
-                                .add(user)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                        startActivity(new Intent(getApplicationContext(), CentralActivity.class));
-                                        finish();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("FS", "Error adding document", e);
-                                        Toast.makeText(getApplicationContext(), "Error adding document.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "One or more fields were blank. ", Toast.LENGTH_SHORT).show();
-                    }
+                    db.collection(Constants.FSCollections.users)
+                            .add(user)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    startActivity(new Intent(getApplicationContext(), CentralActivity.class));
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("FS", "Error adding document", e);
+                                    Toast.makeText(getApplicationContext(), "Error adding document.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "One or more fields were blank. ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        onboardingResetBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ucoVM.deleteUser();
-                startActivity(new Intent(getApplicationContext(), WelcomeViewActivity.class));
-                finish();
-            }
+        onboardingResetBtn.setOnClickListener(view -> {
+            ucoVM.deleteUser();
+            startActivity(new Intent(getApplicationContext(), WelcomeViewActivity.class));
+            finish();
         });
 
     }

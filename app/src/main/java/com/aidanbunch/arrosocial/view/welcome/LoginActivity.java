@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.aidanbunch.arrosocial.R;
 import com.aidanbunch.arrosocial.utils.Constants;
+import com.aidanbunch.arrosocial.utils.SharedPrefs;
 import com.aidanbunch.arrosocial.utils.UtilsMethods;
 import com.aidanbunch.arrosocial.viewmodel.LogInViewModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,8 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText emailForm, passForm;
     AppCompatButton logInBtn;
     LogInViewModel logInViewModel;
-
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,45 +52,31 @@ public class LoginActivity extends AppCompatActivity {
 
         logInViewModel = new ViewModelProvider(this).get(LogInViewModel.class);
 
-        mAuth = FirebaseAuth.getInstance();
+        forgotPass.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), RecoverPassActivity.class)));
 
-        forgotPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), RecoverPassActivity.class));
+        passForm.setOnKeyListener((view, i, keyEvent) -> {
+            if (i == 66) {
+                UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
             }
+            return false;
         });
 
-        passForm.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (i == 66) {
-                    UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                }
-                return false;
-            }
-        });
+        logInBtn.setOnClickListener(view -> {
+            String email = emailForm.getText().toString().trim().toLowerCase();
+            String password = passForm.getText().toString().trim();
 
-        logInBtn.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.P)
-            @Override
-            public void onClick(View view) {
-                String email = emailForm.getText().toString().trim();
-                String password = passForm.getText().toString().trim();
-
-                if (email.equals("") || password.equals("")) {
-                    UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                    setSignInError(signInError, "All fields must be entered.");
-                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                    setSignInError(signInError, "Invalid email");
-                } else if (!(UtilsMethods.checkPass(password))) {
-                    UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
-                    setSignInError(signInError, "Invalid password.");
-                } else {
-                    signInError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
-                    logInViewModel.signIn(email, password, logInAct);
-                }
+            if (email.equals("") || password.equals("")) {
+                UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
+                setSignInError(signInError, "All fields must be entered.");
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
+                setSignInError(signInError, "Invalid email");
+            } else if (!(UtilsMethods.checkPass(password))) {
+                UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);
+                setSignInError(signInError, "Invalid password");
+            } else {
+                signInError.setTextColor(getResources().getColor(Constants.AppColors.off_white));
+                logInViewModel.signIn(email, password, logInAct);
             }
         });
 

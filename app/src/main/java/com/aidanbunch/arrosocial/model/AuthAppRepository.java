@@ -57,6 +57,7 @@ public class AuthAppRepository {
         this.db = FirebaseFirestore.getInstance();
         this.userLiveData = new MutableLiveData<>();
         this.loggedOutLiveData = new MutableLiveData<>();
+        SharedPrefs.instance(application.getApplicationContext());
 
         if (mAuth.getCurrentUser() != null) {
             userLiveData.postValue(mAuth.getCurrentUser());
@@ -65,25 +66,22 @@ public class AuthAppRepository {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
     public void signUpUser(String email, String password, Activity act) {
         ProgressDialog progDialog = new ProgressDialog(act);
         progDialog.setMessage("Signing up...");
         progDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(application.getMainExecutor(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progDialog.dismiss();
-                        if (task.isSuccessful()) {
-                            userLiveData.postValue(mAuth.getCurrentUser());
-                            act.startActivity(new Intent(application.getApplicationContext(), UserCreationOnboardingActivity.class));
-                            act.finish();
-                        } else {
-                            //signUpFailFlag = 1;
-                            Toast.makeText(application.getApplicationContext(), "Authentication failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(application.getMainExecutor(), task -> {
+                    progDialog.dismiss();
+                    if (task.isSuccessful()) {
+                        userLiveData.postValue(mAuth.getCurrentUser());
+                        setUserProperties();
+                        act.startActivity(new Intent(application.getApplicationContext(), UserCreationOnboardingActivity.class));
+                        act.finish();
+                    } else {
+                        //signUpFailFlag = 1;
+                        Toast.makeText(application.getApplicationContext(), "Authentication failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -94,30 +92,24 @@ public class AuthAppRepository {
         progDialog.setMessage("Logging in...");
         progDialog.show();
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                progDialog.dismiss();
-                if (task.isSuccessful()) {
-                    userLiveData.postValue(mAuth.getCurrentUser());
-                    setUserProperties();
-                    act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
-                    act.finish();
-                } else {
-                    Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            progDialog.dismiss();
+            if (task.isSuccessful()) {
+                userLiveData.postValue(mAuth.getCurrentUser());
+                setUserProperties();
+                act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
+                act.finish();
+            } else {
+                Toast.makeText(application.getApplicationContext(), "Login Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void deleteUser() {
         FirebaseUser user = mAuth.getCurrentUser();
-        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d("Auth", "User account deleted.");
-                }
+        user.delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("Auth", "User account deleted.");
             }
         });
         SharedPrefs.instance().resetSharedPrefs();
@@ -128,17 +120,14 @@ public class AuthAppRepository {
         progDialog.setMessage("Sending reset email...");
         progDialog.show();
 
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                progDialog.dismiss();
-                if(task.isSuccessful()) {
-                    act.startActivity(new Intent(application.getApplicationContext(), LoginActivity.class));
-                    act.finish();
-                }
-                else {
-                    Toast.makeText(application.getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+            progDialog.dismiss();
+            if(task.isSuccessful()) {
+                act.startActivity(new Intent(application.getApplicationContext(), LoginActivity.class));
+                act.finish();
+            }
+            else {
+                Toast.makeText(application.getApplicationContext(), "Reset Failure: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -146,20 +135,14 @@ public class AuthAppRepository {
     public void addUserToDb(Map<String, Object> user, Activity act) {
         db.collection(Constants.FSCollections.users)
                 .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
-                        act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
-                        act.finish();
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("FS", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    act.startActivity(new Intent(application.getApplicationContext(), CentralActivity.class));
+                    act.finish();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("FS", "Error adding document", e);
-                        Toast.makeText(application.getApplicationContext(), "Error adding document.", Toast.LENGTH_SHORT).show();
-                    }
+                .addOnFailureListener(e -> {
+                    Log.d("FS", "Error adding document", e);
+                    Toast.makeText(application.getApplicationContext(), "Error adding document.", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -168,17 +151,14 @@ public class AuthAppRepository {
 
         Query dbRef = db.collection(Constants.FSCollections.users).whereEqualTo(Constants.FSUserData.username, cleanedUser).limit(1);
 
-        dbRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for (DocumentSnapshot ds: documentSnapshots){
-                    if (ds!=null){
-                        Log.d("checkUser", "checkingIfusernameExist: FOUND A MATCH");
-                        Toast.makeText(application.getApplicationContext(), "That username already exists.", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Log.d("checkUser", "checkingIfusernameExist: FOUND NO MATCH");
-                    }
+        dbRef.addSnapshotListener((documentSnapshots, e) -> {
+            for (DocumentSnapshot ds: documentSnapshots){
+                if (ds!=null){
+                    Log.d("checkUser", "checkingIfUsernameExist: FOUND A MATCH");
+                    Toast.makeText(application.getApplicationContext(), "That username already exists.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Log.d("checkUser", "checkingIfUsernameExist: FOUND NO MATCH");
                 }
             }
         });
@@ -189,21 +169,18 @@ public class AuthAppRepository {
         if (userLiveData.getValue() != null) {
             String uid = userLiveData.getValue().getUid();
 
-            db.collection(Constants.FSCollections.users).document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if(task.isSuccessful()) {
-                        Map<String, Object> user = task.getResult().getData();
-                        if (user != null) {
-                            SharedPrefs.instance().storeValueString(Constants.FSUserData.username, (String) user.get(Constants.FSUserData.username));
-                            SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, (String) user.get(Constants.FSUserData.fName));
-                            SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, (String) user.get(Constants.FSUserData.lName));
-                            SharedPrefs.instance().storeValueString(Constants.FSUserData.profilePicHex, (String) user.get(Constants.FSUserData.profilePicHex));
-                        }
+            db.collection(Constants.FSCollections.users).document(uid).get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    Map<String, Object> user = task.getResult().getData();
+                    if (user != null) {
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.username, (String) user.get(Constants.FSUserData.username));
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.fName, (String) user.get(Constants.FSUserData.fName));
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.lName, (String) user.get(Constants.FSUserData.lName));
+                        SharedPrefs.instance().storeValueString(Constants.FSUserData.profilePicHex, (String) user.get(Constants.FSUserData.profilePicHex));
                     }
-                    else {
-                        Toast.makeText(application.getApplicationContext(), "User data could not be retrieved, please try again.", Toast.LENGTH_SHORT).show();
-                    }
+                }
+                else {
+                    Toast.makeText(application.getApplicationContext(), "User data could not be retrieved, please try again.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -212,6 +189,7 @@ public class AuthAppRepository {
     public void logOut() {
         mAuth.signOut();
         loggedOutLiveData.postValue(true);
+        SharedPrefs.instance().resetSharedPrefs();
     }
 
 
