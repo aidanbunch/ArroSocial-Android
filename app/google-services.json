@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "517880771609",
+    "project_id": "arro-dev-67d30",
+    "storage_bucket": "arro-dev-67d30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517880771609:android:c90c25c619f5f5740ae688",
+        "android_client_info": {
+          "package_name": "com.aidanbunch.arrosocial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517880771609-2aenej8f23nuvno009jgnnc7722noo0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1PuthDQeR1NhrvDwIR-X5qz1yQkgvFGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517880771609-2aenej8f23nuvno009jgnnc7722noo0k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "517880771609-5ugbmd85ffeuk2r9agmcfismmrampmhq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.derekhsieh.ArroSocial"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
