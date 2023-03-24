@@ -3,16 +3,16 @@ Welcome to the Arro Social Android App, an app designed to connect you with the 
 
 Arro Social provides an intuitive, user-friendly interface that is easy to use, and you can quickly and easily connect with your friends and family. Although the app isn't fully built out, it has several features that make it a powerful tool for staying connected.
 
-![Sign-up](signup.png)
+![Sign-up](preview/signup.png)
 
 # Features
 - Secure authentication and data storage
 
-![Authentication](auth.png)
+![Authentication](preview/auth.png)
 
 - New user onboarding flow
 
-![New user onboarding](onboarding.png)
+![New user onboarding](preview/onboarding.png)
 
 The app file structure is modeled after the Model-View-ViewModel (MVVM) pattern, which helps maintain a clean separation between application logic and the UI, making it easier to test, maintain, and evolve the app. Arro Social's file hierarchy looks something like this:
 `app
