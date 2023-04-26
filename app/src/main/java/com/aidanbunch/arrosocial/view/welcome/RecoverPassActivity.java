@@ -49,6 +49,8 @@ public class RecoverPassActivity extends AppCompatActivity {
         resetBtn = findViewById(R.id.forgot_btn);
         emForm = findViewById(R.id.forgotEmForm);
 
+        emForm.setBackgroundColor(getResources().getColor(Constants.AppColors.off_white));
+
         emForm.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {

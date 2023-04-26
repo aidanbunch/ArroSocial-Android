@@ -54,6 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
         forgotPass.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), RecoverPassActivity.class)));
 
+        emailForm.setBackgroundColor(getResources().getColor(Constants.AppColors.off_white));
+        passForm.setBackgroundColor(getResources().getColor(Constants.AppColors.off_white));
+
         passForm.setOnKeyListener((view, i, keyEvent) -> {
             if (i == 66) {
                 UtilsMethods.hideSoftKeyboard(LoginActivity.this, view);

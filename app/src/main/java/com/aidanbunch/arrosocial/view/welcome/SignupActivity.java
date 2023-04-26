@@ -51,6 +51,10 @@ public class SignupActivity extends AppCompatActivity {
 
         signUpViewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
 
+        emailForm.setBackgroundColor(getResources().getColor(Constants.AppColors.off_white));
+        passForm.setBackgroundColor(getResources().getColor(Constants.AppColors.off_white));
+        rePassForm.setBackgroundColor(getResources().getColor(Constants.AppColors.off_white));
+
         rePassForm.setOnKeyListener((view, i, keyEvent) -> {
             if (i == 66) {
                 UtilsMethods.hideSoftKeyboard(SignupActivity.this, view);
