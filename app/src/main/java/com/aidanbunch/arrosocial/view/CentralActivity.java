@@ -1,5 +1,6 @@
 package com.aidanbunch.arrosocial.view;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -17,6 +18,8 @@ public class CentralActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_central);
+
+        setUpActionBar();
 
         chipNavBar = findViewById(R.id.chipNav);
 
@@ -46,5 +49,10 @@ public class CentralActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
     }
 }
