@@ -1,11 +1,11 @@
-## Arro Social Android App
+# Arro Social Android App
 Welcome to the Arro Social Android App, an app designed to connect you with the people and content that matter most to you. This version of the app was developed as part of an internship for the Android version of Arro Social. The app is written in Java and utilizes Firebase Auth/Firestore for its backend.
 
 Arro Social provides an intuitive, user-friendly interface that is easy to use, and you can quickly and easily connect with your friends and family. Although the app isn't fully built out, it has several features that make it a powerful tool for staying connected.
 
 <img src="preview/signup.png" width="30%" height="60%" />
 
-# Features
+## Features
 - Secure authentication and data storage
 
 <img src="preview/auth.png" width="30%" height="60%" />
@@ -25,7 +25,7 @@ app
 |   |   |-- viewmodel
 ```
 
-# Getting Started
+## Getting Started
 To get started with the Arro Social Android App, follow these steps:
 
 1. Clone the repository to your local machine.
@@ -35,5 +35,5 @@ To get started with the Arro Social Android App, follow these steps:
 5. Build the application using Gradle.
 6. Run the app on a virtual device or a physical device connected to your computer.
 
-# Getting Help
+## Getting Help
 If you have any questions or run into any issues with the Arro Social Android App, please feel free to reach out to our team by opening an issue on our GitHub repository. We are always happy to help and are committed to providing a positive experience for all users of our application.
